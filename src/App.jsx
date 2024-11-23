@@ -4,9 +4,13 @@ import DashboardPage from "./pages/DashboardPage/DashboardPage.jsx";
 import ClientsPage from "./pages/ClientsPage/ClientsPage.jsx";
 import CalendarPage from "./pages/CalendarPage/CalendarPage.jsx";
 
+// Import components
+import Header from "./components/Header/Header.jsx";
+
 function App() {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         {/* Main pages */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
