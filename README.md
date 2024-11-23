@@ -47,18 +47,16 @@ Libraries that may be helpful:
 
 Frameworks:
 
-- Bootstrap (toast for notifcations)
+- Bootstrap: open source css frameworks used to build fast and responsive sites
+  - toasts for notifcations
+- Refine
 
 ### APIs
-
-List any external sources of data that will be used in your app.
 
 - Google Calendar API:
   - Used to integrate calendar functionalities, enabling viewing, creating, updating, and deleting events directly within the CRM application.
 
 ### Sitemap
-
-List the pages of your app with brief descriptions. You can show this visually, or write it out.
 
 Page 1: Client List Page (Manage leads)
 
@@ -79,7 +77,7 @@ Page 2: Class Schedules Page (Manage class schedules)
 
 ### Mockups
 
-Provide visuals of your app's screens. You can use pictures of hand-drawn sketches, or wireframing tools like Figma.
+[Link to Figma design](https://www.figma.com/design/D2wCPghiKi2NqWcCWEFnIF/SparkWise-CRM---BrainStation-Capstone-Proposal?node-id=23-465&node-type=frame&t=KHbWv92fTozRijPK-0)
 
 ### Data
 
