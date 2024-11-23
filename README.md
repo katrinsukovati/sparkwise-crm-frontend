@@ -53,7 +53,8 @@ Frameworks:
 
 List any external sources of data that will be used in your app.
 
-- No external APIs will be used. The application will rely on its own server and database.
+- Google Calendar API:
+  - Used to integrate calendar functionalities, enabling viewing, creating, updating, and deleting events directly within the CRM application.
 
 ### Sitemap
 
@@ -96,14 +97,6 @@ Provide visuals of your app's screens. You can use pictures of hand-drawn sketch
     - status (String) – e.g., "Form Filled Out," "Contacted," "Trial Lesson Booked"
     - created_at (Datetime)
 
-- Calendar Table
-  - Columns:
-    - id (Primary Key, Auto-increment)
-    - name (String) – Class title
-    - date (Datetime)
-    - time (Datetime)
-    - google_event_id (String, Nullable) – For syncing with Google Calendar
-
 Relationships:
 
 - For simplicity in MVP, there are no direct foreign key relationships.
@@ -112,111 +105,226 @@ Relationships:
 
 **Clients Endpoints**
 
-1. Get All Clients:
+1. Get All Clients
 
 Method: GET
-URL: /api/clients
+URL: /clients
 Description: Fetch all client records from the database.
 Response Example:
 
 [
 {
 "id": 1,
-"parents_first_name": "John",
-"parents_last_name": "Doe",
-"email": "john.doe@example.com",
-"phone": "123-456-7890",
-"childs_first_name": "Emily",
-"childs_grade": 4,
-"additional_notes": "wants to learn how to write creatively",
+"parent_first_name": "John",
+"parent_last_name": "Doe",
+"parent_phone": "123-456-7890",
+"parent_email": "john.doe@example.com",
+"child_first_name": "Emily",
+"child_grade": "4",
+"subjects_interested": "Creative Writing",
+"city": "Toronto",
+"postal_code": "A1B 2C3",
+"additional_notes": "Wants to learn how to write creatively",
 "status": "Form Filled Out",
+"how_did_you_hear": "Online Ad",
 "created_at": "2024-11-01T14:30:00Z"
 }
 ]
 
-2. Add New Client:
+2. Get Single Client by ID
 
-Method: POST
-URL: /api/clients
+Method: GET
+URL: /clients/:id
+Description: Fetches the details of a single client based on the provided ID.
+Response Example:
 
-Body Example:
 {
-"parents_first_name": "John",
-"parents_last_name": "Doe",
-"email": "john.doe@example.com",
-"phone": "123-456-7890",
-"childs_first_name": "Emily",
-"childs_grade": 4,
-"additional_notes": "wants scratch coding",
-"status": "Form Filled Out"
+"id": 1,
+"parent_first_name": "John",
+"parent_last_name": "Doe",
+"parent_email": "john.doe@example.com",
+"parent_phone": "123-456-7890",
+"child_first_name": "Emily",
+"child_grade": "4",
+"subjects_interested": "Creative Writing",
+"city": "Toronto",
+"postal_code": "A1B 2C3",
+"additional_notes": "Wants to learn how to write creatively",
+"status": "Form Filled Out",
+"how_did_you_hear": "Social Media",
+"created_at": "2024-11-01T14:30:00Z"
 }
 
-Response Example:
-{ "message": "Client added successfully", "id": 1 }
-
-3. Update Client
+3. Update Client by ID
 
 Method: PUT
-URL: /api/clients/:id
-Description: Update multiple fields for a specific client.
-Body Example:
+URL: /clients/:id
+Description: Updates the details of an existing client by ID. All fields must pass validation before updating.
+Request Example:
 {
-"parents_first_name": "Jane",
-"parents_last_name": "Smith",
-"email": "jane.smith@example.com",
-"phone": "987-654-3210",
-"childs_first_name": "Ethan",
-"childs_grade": 5,
-"additional_notes": "wants to learn how to write creatively"
+"parent_first_name": "John",
+"parent_last_name": "Doe",
+"parent_phone": "123-456-7890",
+"parent_email": "john.doe@example.com",
+"child_first_name": "Jane",
+"child_grade": "5",
+"subjects_interested": "Math, Science",
+"city": "Toronto",
+"postal_code": "M5V 1A1",
+"additional_notes": "Prefers evening classes",
+"status": "Trial Lesson Booked",
+"how_did_you_hear": "Google"
+}
+
+Response Example:
+{
+"id": 2,
+"parent_first_name": "John",
+"parent_last_name": "Doe",
+"parent_phone": "123-456-7890",
+"parent_email": "john.doe@example.com",
+"child_first_name": "Jane",
+"child_grade": "5",
+"subjects_interested": "Math, Science",
+"city": "Toronto",
+"postal_code": "M5V 1A1",
+"additional_notes": "Prefers evening classes",
+"status": "Trial Lesson Booked",
+"how_did_you_hear": "Google",
+"created_at": "2024-11-22T03:31:29.000Z",
+"updated_at": "2024-11-22T18:26:41.000Z"
+}
+
+4. Create New Client
+
+Method: POST
+URL: /clients
+Description: Creates a new client record in the database. Mandatory fields include parent and child information, contact details, and subjects of interest.
+Request Example:
+
+{
+"parent_first_name": "John",
+"parent_last_name": "Smith",
+"parent_phone": "555-123-4567",
+"parent_email": "john.smith@example.com",
+"child_first_name": "Alex",
+"child_grade": "2",
+"subjects_interested": "Reading, Math",
+"city": "Montreal",
+"postal_code": "H2Y 1C6",
+"how_did_you_hear": "Referral"
 }
 Response Example:
-{ "message": "Client updated successfully" }
+{
+"message": "Client has been created successfully."
+}
 
-4. Update Client Status (drop down)
-
-Method: PATCH
-URL: /api/clients/:id/status
-Body Example:
-{ "status": "Trial Lesson Booked" }
-Response Example:
-{ "message": "Client status updated successfully" }
-
-5. Delete Client
-
-Method: DELETE
-URL: /api/clients/:id
-Description: Remove a client from the database.
-Response Example:
-{ "message": "Client deleted successfully" }
+5. Delete Client by ID
+   Method: DELETE
+   URL: /clients/:id
+   Description: Deletes an existing client by ID.
+   Response Example:
+   Success: Status 204 (No Content)
+   Failure:
+   { "message": "Client with ID 5 not found" }
 
 **Calendar API Endpoints**
 
 1. Get All Events
 
 Method: GET
-URL: /api/calendar
+URL: /calendar
 Description: Retrieve all calendar events to display.
 Response Example:
 [
 {
-"id": 1,
-"name": "Math Class",
-"date": "2024-11-19",
-"time": "10:00:00",
-"google_event_id": null
+"kind": "calendar#event",
+"etag": "\"3377335321262000\"",
+"id": "jqkd6ij88fue2t3qvq62281gto",
+"status": "confirmed",
+"htmlLink": "....",
+"created": "2023-06-30T18:16:30.000Z",
+"updated": "2023-07-06T18:21:00.631Z",
+"summary": "OuterBox & SparkWise Enrichment",
+"description": "Event Name:",
+"location": "phone number",
+"creator": {
+"email": "email@email.com"
+},
+"organizer": {
+"email": "email@email.com"
+},
+"start": {
+"dateTime": "2023-07-06T15:00:00-04:00",
+"timeZone": "America/New_York"
+},
+"end": {
+"dateTime": "2023-07-06T15:45:00-04:00",
+"timeZone": "America/New_York"
+},
+"iCalUID": "jqkd6ij88fue2t3qvq62281gto@google.com",
+"sequence": 0,
+"attendees": [
+{
+"email": "email@email.com",
+"organizer": true,
+"responseStatus": "accepted"
 },
 {
-"id": 2,
-"name": "Science Class",
-"date": "2024-11-20",
-"time": "14:00:00",
-"google_event_id": "abc123"
+"email": "email@email.com",
+"self": true,
+"responseStatus": "accepted"
 }
+],
+"guestsCanInviteOthers": false,
+"reminders": {
+"useDefault": true
+},
+"eventType": "default"
+},.....
 ]
 
-2. Add New Event
+2. Get Sinlge Event by Id
+   Method: GET
+   URL: /calendar/event/:id
+   Description: Get a single event from a calendar based on ID.
+   Response Example:
+   {
+   "kind": "calendar#event",
+   "etag": "\"3464638818626000\"",
+   "id": "e705ih0qeq613ga0dt111agn3s",
+   "status": "cancelled",
+   "htmlLink": "....",
+   "created": "2024-11-22T23:49:43.000Z",
+   "updated": "2024-11-22T23:50:09.313Z",
+   "summary": "Team Meeting",
+   "description": "Discuss project progress and next steps",
+   "creator": {
+   "email": "email@email.com"
+   },
+   "organizer": {
+   "email": "email@email.com",
+   "self": true
+   },
+   "start": {
+   "dateTime": "2024-12-01T10:00:00-05:00",
+   "timeZone": "UTC"
+   },
+   "end": {
+   "dateTime": "2024-12-01T12:00:00-05:00",
+   "timeZone": "UTC"
+   },
+   "iCalUID": "e705ih0qeq613ga0dt111agn3s@google.com",
+   "sequence": 1,
+   "reminders": {
+   "useDefault": true
+   },
+   "eventType": "default"
+   }
+
+3. Add New Event
    Method: POST
-   URL: /api/calendar
+   URL: /calendar
    Description: Create a new event in the calendar.
    Body Example:
    {
@@ -228,57 +336,103 @@ Response Example:
    Response Example:
    { "message": "Event added successfully", "id": 1 }
 
-3. Update Event
+4. Update Event
    Method: PUT
-   URL: /api/calendar/:id
+   URL: /calendar/event/:id
    Description: Update an existing event in the calendar.
    Body Example:
    {
-   "name": "Math Class (Updated)",
-   "date": "2024-11-19",
-   "time": "11:00:00"
+   "summary": "Team Meeting",
+   "description": "Discuss project progress and next steps",
+   "start": "2024-12-01T10:00:00-05:00",
+   "end": "2024-12-01T11:00:00-06:00"
    }
    Response Example:
-   { "message": "Event updated successfully" }
+   {"message": "Event created successfully"}
 
-4. Delete Event
+5. Delete Event
    Method: DELETE
-   URL: /api/calendar/:id
+   URL: /calendar/event/:id
    Description: Remove an event from the calendar.
    Response Example:
    { "message": "Event deleted successfully" }
+
+6. Get todays events (will be used on the dashboard)
+   Method: GET
+   URL: /calendar/today
+   Description: Get all events from the calendar for todays date.
+   Response Example:
+   [
+   {
+   "kind": "calendar#event",
+   "etag": "\"3464068087832000\"",
+   "id": "mfpb7e9d3hfage27v4ed0js2s8_20241122T110000Z",
+   "status": "confirmed",
+   "htmlLink": "....",
+   "created": "2024-11-08T15:17:38.000Z",
+   "updated": "2024-11-19T16:34:03.916Z",
+   "summary": "Creative Writing Private Lesson",
+   "description": "...",
+   "creator": {
+   "email": "sparkwiseenrichment@gmail.com",
+   "self": true
+   },
+   "organizer": {
+   "email": "sparkwiseenrichment@gmail.com",
+   "self": true
+   },
+   "start": {
+   "dateTime": "2024-11-22T06:00:00-05:00",
+   "timeZone": "America/Toronto"
+   },
+   "end": {
+   "dateTime": "2024-11-22T07:00:00-05:00",
+   "timeZone": "America/Toronto"
+   },
+   "recurringEventId": "mfpb7e9d3hfage27v4ed0js2s8",
+   "originalStartTime": {
+   "dateTime": "2024-11-22T06:00:00-05:00",
+   "timeZone": "America/Toronto"
+   },
+   "iCalUID": "mfpb7e9d3hfage27v4ed0js2s8@google.com",
+   "sequence": 1,
+   "reminders": {
+   "useDefault": true
+   },
+   "eventType": "default"
+   }
+   ]
+
+7. Get range of events (only needs query params of start and end)
+   Method: GET
+   URL: /calendar/range?start=2024-12-01T11:00:00-05:00&end=2024-12-10T11:00:00-05:00&limit=20
+   Description: Get all events from the calendar for todays date.
+   Response Example:
 
 ## Roadmap
 
 Day 1-2: Backend Setup
 
 - Configure the MySQL database schema:
-- Create tables for Clients and Calendar.
+  - Create tables for Clients and Calendar.
+- Set up and test basic CRUD endpoints for Clients and Calendar
+- Set up basic integration with the Google Calendar API
 
-  - Set up and test basic CRUD endpoints for:
-  - GET /api/clients, POST /api/clients, PATCH /api/clients/:id, DELETE /api/clients/:id.
-  - GET /api/calendar, POST /api/calendar, PATCH /api/calendar/:id, DELETE /api/calendar/:id.
+Day 3-4: Frontend Setup and Client List Page
 
-- Day 3: Frontend Setup and Client List Page
 - Set up the React frontend environment.
 - Build the Client List Page:
   - Fetch and display clients using GET /api/clients.
   - Add a form (modal) for adding new clients (POST /api/clients).
   - Implement status updates using PATCH /api/clients/:id.
 
-Day 4: Class Schedule Page
+Day 4-5: Calendar Page
 
-- Build the Class Schedule Page:
+- Build the Calendar Page
 - Use FullCalendar to display the monthly calendar.
-- Fetch events using GET /api/calendar and display them in the calendar.
-- Implement modals for adding or editing events:
-  - Use POST /api/calendar and PATCH /api/calendar/:id.
+- Implement modals for adding or editing events
 
-Day 5-6: Google Calendar Integration
-
-- Set up basic integration with the Google Calendar API
-
-Day 7: Finalizing and Deployment
+Day 6-7: Finalizing and Deployment
 
 - Perform end-to-end testing:
   - Verify all endpoints work as expected with frontend interactions.
@@ -286,7 +440,7 @@ Day 7: Finalizing and Deployment
   - Polish the UI for usability and presentation.
 - Review and finalize all features.
 - Deploy the app.
-- Prepare a demo showcasing the Client List and Class Schedule pages.
+- Prepare a demo and slideshow showcasing the Client List and Class Schedule pages.
 
 ---
 
