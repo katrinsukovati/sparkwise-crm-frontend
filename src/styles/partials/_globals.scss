@@ -16,8 +16,9 @@ body {
   background-color: $BG;
   min-height: 100vh;
   color: $primary-black;
-  margin-left: 15rem;
-  // padding: 1rem;
+  @include tablet {
+    margin-left: 15rem;
+  }
 }
 
 .section {
