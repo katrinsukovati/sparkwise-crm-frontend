@@ -3,30 +3,39 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/typography" as *;
 
+// $tablet-breakpoint: 768px;
+// $desktop-breakpoint: 1280px;
+
 .sidebar {
-  height: 95%;
-  width: 200px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  margin-top: 1rem;
-  margin-left: 1rem;
-  border-radius: 1.5rem;
-  background-color: $white;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  @include sidebar-styles;
+  //   Hiding the side bar on mobile by default
+  width: 0;
+  //   Spacing for the logo
+  padding-top: 60px;
+
+  // When the nav bar opens, set the width
+  &.open {
+    width: 250px;
+  }
+
+  /* Desktop styles */
+  @include tablet {
+    height: 95%;
+    width: 200px;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    border-radius: 1.5rem;
+    overflow-x: visible;
+    padding-top: 0;
+  }
 
   &__img {
     max-width: 150px;
     max-height: 60px;
   }
+
   &__logo {
     margin-bottom: 1rem;
-    width: 100%;
   }
 
   &__links {
@@ -38,5 +47,64 @@
 
   &__logout {
     width: 150px;
+  }
+}
+
+.sidebar__toggle {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  //   This makes sure that the side bar is on top of everything else on mobile
+  z-index: 3;
+  font-size: 2rem;
+  background-color: $white;
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-icon {
+    padding: 0.35rem;
+  }
+
+  // On tablet, hide the sidebar toggle
+  @include tablet {
+    display: none;
+  }
+}
+
+.sidebar__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Grey overlay */
+  z-index: 1; /* Below sidebar */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.sidebar__closebtn {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  font-size: 2rem;
+  color: $primary-blue;
+  cursor: pointer;
+  display: block;
+
+  @include tablet {
+    display: none; /* Hide close button on desktop */
   }
 }
