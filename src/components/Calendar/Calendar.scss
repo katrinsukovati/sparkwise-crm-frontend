@@ -3,24 +3,61 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/typography" as *;
 
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
 :root {
-  --fc-event-bg-color: #f9f9f9; 
-  --fc-event-border-color: transparent; 
+  --fc-event-bg-color: #f9f9f9;
+  --fc-event-border-color: transparent;
+  --fc-event-color: $seconday-black;
 }
 
 .calendar-container {
-  margin-right: 2rem;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.fc .fc-scrollgrid-liquid {
-  border-radius: 5px;
+.fc {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .custom-toolbar {
   display: flex;
   align-items: center;
-  justify-content: center;
   margin-bottom: 10px;
+}
+
+.today-button {
+  background: $primary-blue;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  max-width: 4rem;
+  font-size: 1rem;
+  margin-right: auto;
+}
+
+.today-button:hover {
+  background: #0056b3;
+}
+
+.toolbar-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 2;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
 }
 
 .nav-button {
@@ -30,7 +67,7 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #007bff;
+  color: $primary-blue;
   cursor: pointer;
 }
 
@@ -47,41 +84,27 @@
 .view-buttons {
   display: flex;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-top: 0.5rem;
 }
 
 .view-button {
   margin: 0 5px;
   padding: 4px 8px;
-  border: 1px solid #007bff;
+  border: 1px solid $primary-blue;
   border-radius: 5px;
   background: none;
   cursor: pointer;
-  color: #007bff;
+  color: $primary-blue;
 }
 
 .view-button.active {
-  background: #007bff;
-  color: white;
+  background: $primary-blue;
+  color: $white;
 }
 
 .view-button:hover {
   background: #0056b3;
-  color: white;
-}
-
-.today-button {
-  background: #007bff;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.today-button:hover {
-  background: #0056b3;
+  color: $white;
 }
 
 .fc .fc-toolbar-title {
@@ -96,14 +119,14 @@
 .fc .fc-daygrid-day-number {
   font-size: 0.8rem;
   font-weight: 500;
-  color: #333333;
+  color: $seconday-black;
 }
 
 .fc .fc-daygrid-event {
   font-size: 0.7rem;
-  color: #333333 !important;
+  color: $seconday-black !important;
   background-color: #f9f9f9;
-  border-left: 4px solid #007bff;
+  border-left: 4px solid $primary-blue;
   border-radius: 6px;
   padding: 4px 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -114,8 +137,9 @@
 }
 
 .fc .fc-event-title {
-  color: #333333 !important;
+  color: $seconday-black !important;
   font-weight: 500;
+  font-size: 0.6rem;
 }
 
 .fc .fc-timegrid-slot-label {
@@ -134,4 +158,75 @@
 
 .fc-daygrid-event-dot {
   display: none;
+}
+
+.fc .fc-timegrid {
+  border-color: transparent;
+}
+
+.fc .fc-timegrid-slot {
+  height: auto;
+}
+
+.fc .fc-timegrid-col-frame {
+  background: $white;
+}
+
+.fc .fc-timegrid-event {
+  font-size: 0.7rem;
+  color: $seconday-black;
+  background-color: #f9f9f9;
+  border-left: 4px solid $primary-blue;
+  border-radius: 6px;
+  padding: 2px 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fc .fc-timegrid-event:hover {
+  background-color: #e6e6e6;
+}
+
+.fc .fc-timegrid-slot-label {
+  display: none;
+}
+
+.fc .fc-timegrid-axis-cushion {
+  display: none;
+}
+
+.fc .fc-timegrid-day-header {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $seconday-black;
+}
+
+.fc-timegrid-event .fc-event-time {
+  color: $seconday-black;
+  font-weight: 500;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  font-size: 0.5rem;
+}
+
+.fc-direction-ltr .fc-daygrid-event .fc-event-time {
+  font-size: 0.6rem;
+}
+
+.fc .fc-timegrid-slot-label {
+  display: block;
+  padding: 0 10px; 
+}
+
+.fc .fc-timegrid-axis-cushion,
+.fc .fc-timegrid-slot-label {
+  color: $seconday-black;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.fc .fc-col-header-cell.fc-day-today,
+.fc .fc-timegrid-col.fc-day-today .fc-timegrid-col-frame,
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: $light-blue;
 }
