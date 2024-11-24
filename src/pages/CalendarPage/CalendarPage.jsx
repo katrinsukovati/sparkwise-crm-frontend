@@ -1,7 +1,14 @@
 import "../CalendarPage/CalendarPage.scss";
+import Calendar from "../../components/Calendar/Calendar";
 
 function CalendarPage() {
-  return <div>I am a calendar page!</div>;
+  return (
+    <>
+      <div className="calendar-container">
+        <Calendar />
+      </div>
+    </>
+  );
 }
 
 export default CalendarPage;

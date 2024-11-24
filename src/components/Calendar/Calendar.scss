@@ -1,0 +1,137 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+:root {
+  --fc-event-bg-color: #f9f9f9; 
+  --fc-event-border-color: transparent; 
+}
+
+.calendar-container {
+  margin-right: 2rem;
+}
+
+.fc .fc-scrollgrid-liquid {
+  border-radius: 5px;
+}
+
+.custom-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  color: #0056b3;
+}
+
+.calendar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 15px;
+}
+
+.view-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.view-button {
+  margin: 0 5px;
+  padding: 4px 8px;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  background: none;
+  cursor: pointer;
+  color: #007bff;
+}
+
+.view-button.active {
+  background: #007bff;
+  color: white;
+}
+
+.view-button:hover {
+  background: #0056b3;
+  color: white;
+}
+
+.today-button {
+  background: #007bff;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.today-button:hover {
+  background: #0056b3;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1rem;
+}
+
+.fc .fc-view-harness {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.fc .fc-daygrid-day-number {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #333333;
+}
+
+.fc .fc-daygrid-event {
+  font-size: 0.7rem;
+  color: #333333 !important;
+  background-color: #f9f9f9;
+  border-left: 4px solid #007bff;
+  border-radius: 6px;
+  padding: 4px 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fc .fc-daygrid-event:hover {
+  background-color: #e6e6e6;
+}
+
+.fc .fc-event-title {
+  color: #333333 !important;
+  font-weight: 500;
+}
+
+.fc .fc-timegrid-slot-label {
+  font-size: 0.75rem;
+  color: #555555;
+}
+
+.fc .fc-timegrid-col-header-cell {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.fc .fc-scrollgrid {
+  border-radius: 12px;
+}
+
+.fc-daygrid-event-dot {
+  display: none;
+}
