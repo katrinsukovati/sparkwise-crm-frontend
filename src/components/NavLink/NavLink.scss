@@ -1,0 +1,44 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+.container {
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: start; /* Align content to the left */
+  width: 100%;
+  color: $grey-inactive-nav;
+  transition: $transition;
+  padding: 0.75rem 1rem; /* Add padding for spacing */
+  gap: 0.5rem;
+
+  &:hover {
+    color: $primary-blue;
+  }
+
+  &--active {
+    background-color: $primary-blue-transparent;
+    border-radius: 0.625rem;
+    color: $primary-blue;
+  }
+
+  &__icon {
+    flex-shrink: 0; /* Prevent icon from shrinking */
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0.5rem; /* Spacing between icon and text */
+    color: inherit; /* Inherit container's color */
+  }
+
+  &__link {
+    // flex-grow: 1;
+    text-decoration: none;
+    font-size: 1rem;
+    color: inherit;
+    white-space: nowrap;
+  }
+}

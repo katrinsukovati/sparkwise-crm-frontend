@@ -13,9 +13,11 @@
 }
 
 body {
-  background: linear-gradient($bg-graphite 200px, $bg-light-grey 200px);
+  background-color: $BG;
   min-height: 100vh;
-  color: $primary-instock-black;
+  color: $primary-black;
+  margin-left: 15rem;
+  // padding: 1rem;
 }
 
 .section {
