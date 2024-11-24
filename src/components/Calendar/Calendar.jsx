@@ -6,6 +6,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import EventModal from "../EventModal/EventModal";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
