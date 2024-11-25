@@ -1,0 +1,40 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+.login-container {
+  display: flex;
+  gap: 0rem;
+  transition: $transition;
+
+  &__logo {
+    max-width: 10rem;
+  }
+
+  &__btn {
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    padding-top: 0.5rem;
+  }
+
+  @include tablet {
+    gap: 1rem;
+
+    &__logo {
+      max-width: 15rem;
+    }
+
+    &__btn {
+      gap: 1rem;
+    }
+
+    &__title {
+      font-size: 2rem;
+    }
+  }
+}
