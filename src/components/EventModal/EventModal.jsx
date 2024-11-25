@@ -25,7 +25,6 @@ function EventModal({ show, handleClose, event, accessToken, refreshEvents }) {
   // Populate state when the `event` prop changes
   useEffect(() => {
     if (event) {
-
       // Use the correct property names based on your event object
       const startDateTime = event.start;
       const endDateTime = event.end;
@@ -97,9 +96,9 @@ function EventModal({ show, handleClose, event, accessToken, refreshEvents }) {
         }
       );
 
-      toast.success("Event has been updated successfully!");
       refreshEvents(); // Refresh events
       handleClose(); // Close modal
+      toast.success("Event has been updated successfully!");
     } catch (error) {
       console.error("Error saving event:", error);
       toast.error("Failed to update the event. Please try again.");
@@ -113,9 +112,9 @@ function EventModal({ show, handleClose, event, accessToken, refreshEvents }) {
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
 
-      toast.success("Event deleted successfully!");
       refreshEvents(); // Refresh the events on the calendar
       handleClose(); // Close the modal
+      toast.success("Event deleted successfully!");
     } catch (error) {
       console.error(
         "Error deleting event:",
@@ -126,81 +125,83 @@ function EventModal({ show, handleClose, event, accessToken, refreshEvents }) {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
-        <Modal.Title>Event Details</Modal.Title>
-        <IoClose onClick={handleClose} className="close-btn" />
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          {/* Title */}
-          <Form.Group className="mb-3" controlId="formEventTitle">
-            <Form.Label>Event Title</Form.Label>
-            <Form.Control
-              type="text"
-              name="summary"
-              value={form.summary}
-              onChange={handleInputChange}
-              placeholder="Enter event title"
-            />
-          </Form.Group>
+    <>
+      <ToastContainer theme="colored" />
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header>
+          <Modal.Title>Event Details</Modal.Title>
+          <IoClose onClick={handleClose} className="close-btn" />
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            {/* Title */}
+            <Form.Group className="mb-3" controlId="formEventTitle">
+              <Form.Label>Event Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="summary"
+                value={form.summary}
+                onChange={handleInputChange}
+                placeholder="Enter event title"
+              />
+            </Form.Group>
 
-          {/* Start Date */}
-          <Form.Group className="mb-3" controlId="formStartDate">
-            <Form.Label>Start Date</Form.Label>
-            <Form.Control
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </Form.Group>
+            {/* Start Date */}
+            <Form.Group className="mb-3" controlId="formStartDate">
+              <Form.Label>Start Date</Form.Label>
+              <Form.Control
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </Form.Group>
 
-          {/* Start and End Times */}
-          <Form.Group className="mb-3" controlId="formStartTime">
-            <div style={{ display: "flex", gap: "10px" }}>
-              <div style={{ flex: 1 }}>
-                <Form.Label>Start Time</Form.Label>
-                <Form.Control
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                />
+            {/* Start and End Times */}
+            <Form.Group className="mb-3" controlId="formStartTime">
+              <div style={{ display: "flex", gap: "10px" }}>
+                <div style={{ flex: 1 }}>
+                  <Form.Label>Start Time</Form.Label>
+                  <Form.Control
+                    type="time"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                  />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <Form.Label>End Time</Form.Label>
+                  <Form.Control
+                    type="time"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                  />
+                </div>
               </div>
-              <div style={{ flex: 1 }}>
-                <Form.Label>End Time</Form.Label>
-                <Form.Control
-                  type="time"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                />
-              </div>
-            </div>
-          </Form.Group>
+            </Form.Group>
 
-          {/* Description */}
-          <Form.Group className="mb-3" controlId="formDescription">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={5}
-              name="description"
-              value={form.description}
-              onChange={handleInputChange}
-              placeholder="Add a description for the event"
-            />
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="danger" onClick={handleDelete}>
-          Delete Event
-        </Button>
-        <Button variant="primary" onClick={handleSave}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
-      <ToastContainer />
-    </Modal>
+            {/* Description */}
+            <Form.Group className="mb-3" controlId="formDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={5}
+                name="description"
+                value={form.description}
+                onChange={handleInputChange}
+                placeholder="Add a description for the event"
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete Event
+          </Button>
+          <Button variant="primary" onClick={handleSave}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }
 

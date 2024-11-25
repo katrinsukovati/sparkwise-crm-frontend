@@ -1,8 +1,5 @@
-
 function AddEventModal() {
-  return (
-    <div>AddEventModal</div>
-  )
+  return <div>AddEventModal</div>;
 }
 
-export default AddEventModal
+export default AddEventModal;
