@@ -1,6 +1,6 @@
 import "./Header.scss";
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo/sparkwise-logo.svg";
 import { IoGrid } from "react-icons/io5";
 import NavLink from "../NavLink/NavLink";
@@ -14,9 +14,8 @@ import { FiLogOut } from "react-icons/fi";
 import { FaBars } from "react-icons/fa6";
 
 function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleSidebar = () => setIsOpen(!isOpen);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   // Close sidebar automatically when switching to tablet/desktop
   useEffect(() => {
@@ -25,7 +24,7 @@ function Header() {
     const handleResize = () => {
       if (window.innerWidth >= tabletBreakpoint) {
         // Close the sidebar when transitioning to tablet/desktop
-        setIsOpen(false);
+        setSidebarOpen(false);
       }
     };
 
@@ -38,7 +37,7 @@ function Header() {
   return (
     <>
       {/* Mobile toggle button */}
-      {!isOpen && (
+      {!sidebarOpen && (
         <button className="sidebar__toggle" onClick={toggleSidebar}>
           <FaBars className="sidebar__toggle-icon" />
         </button>
@@ -46,69 +45,73 @@ function Header() {
 
       {/* Grey backdrop */}
       <div
-        className={`sidebar__backdrop ${isOpen ? "visible" : ""}`}
+        className={`sidebar__backdrop ${sidebarOpen ? "visible" : ""}`}
         onClick={toggleSidebar}
       ></div>
-      {/* Sidebar */}
-      <header className={`sidebar section ${isOpen ? "open" : ""}`}>
-        {/* Close button for mobile */}
-        <span className="sidebar__closebtn" onClick={toggleSidebar}>
-          &times; {/* Close icon */}
-        </span>
 
-        <div className="sidebar__links">
-          <div className="sidebar__logo">
+      <div className="app">
+        {/* Sidebar */}
+        <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+          {/* Close button for mobile */}
+          <span className="sidebar__closebtn" onClick={toggleSidebar}>
+            &times; {/* Close icon */}
+          </span>
+          <ul className="sidebar__ul">
             <Link to={"/"}>
-              <img className="sidebar__img" src={logo} alt="SparkWise Logo" />
+              <img className="sidebar__logo" src={logo} alt="SparkWise Logo" />
             </Link>
-          </div>
-          <NavLink
-            icon={<IoGrid className="icon" />}
-            text={"Dashboard"}
-            to={"/dashboard"}
-          />
-          <NavLink
-            icon={<FaCalendar className="icon" />}
-            text={"Calendar"}
-            to={"/calendar"}
-          />
-          <NavLink
-            icon={<MdPeople className="icon" />}
-            text={"Clients"}
-            to={"/clients"}
-          />
-          {/* WIP PAGES BELOW */}
-          <NavLink
-            icon={<RiGraduationCapFill className="icon" />}
-            text={"Students"}
-            to={"/students"}
-          />
-          <NavLink
-            icon={<IoBriefcase className="icon" />}
-            text={"Teachers"}
-            to={"/teachers"}
-          />
-          <NavLink
-            icon={<GrPersonalComputer className="icon" />}
-            text={"Classes"}
-            to={"/classes"}
-          />
-          <NavLink
-            icon={<BsCreditCardFill className="icon" />}
-            text={"Invoices"}
-            to={"/invoices"}
-          />
+            <li className="sidebar__item">
+              <NavLink
+                icon={<IoGrid className="icon" />}
+                text={"Dashboard"}
+                to={"/dashboard"}
+              />
+            </li>
+            <li className="sidebar__item">
+              <NavLink
+                icon={<FaCalendar className="icon" />}
+                text={"Calendar"}
+                to={"/calendar"}
+              />
+            </li>
+            <li className="sidebar__item">
+              <NavLink
+                icon={<MdPeople className="icon" />}
+                text={"Clients"}
+                to={"/clients"}
+              />
+            </li>
+            <li className="sidebar__item">
+              <NavLink
+                icon={<RiGraduationCapFill className="icon" />}
+                text={"Students"}
+                to={"/students"}
+              />
+            </li>
+            <li className="sidebar__item">
+              <NavLink
+                icon={<IoBriefcase className="icon" />}
+                text={"Teachers"}
+                to={"/teachers"}
+              />
+            </li>
+            <li className="sidebar__item">
+              <NavLink
+                icon={<GrPersonalComputer className="icon" />}
+                text={"Classes"}
+                to={"/classes"}
+              />
+            </li>
+            <li className="sidebar__item">
+              <NavLink
+                icon={<BsCreditCardFill className="icon" />}
+                text={"Invoices"}
+                to={"/invoices"}
+              />
+            </li>
+          </ul>
         </div>
-
-        {/* Bottom section with Log Out */}
-        <span className="sidebar__logout">
-          <NavLink
-            icon={<FiLogOut className="icon" />}
-            text={"Log Out"}
-            to={"/logout"}
-          />
-        </span>
-      </header>
+      </div>
     </>
   );
 }

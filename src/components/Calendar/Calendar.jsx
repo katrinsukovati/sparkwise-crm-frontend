@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import { useState, useRef } from "react";
 import "./Calendar.scss";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -8,36 +7,15 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import EventModal from "../EventModal/EventModal";
 
-const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-
-function Calendar() {
-  const [events, setEvents] = useState([]);
+function Calendar({ events, refreshEvents, accessToken }) {
   const calendarRef = useRef(null);
   const [currentView, setCurrentView] = useState("Month");
   const [calendarTitle, setCalendarTitle] = useState("");
 
-  async function getEvents() {
-    try {
-      const { data } = await axios.get(`${BASE_URL}/calendar`);
-      const formattedEvents = data.map((event) => ({
-        id: event.id,
-        title: event.summary || "Untitled Event",
-        start: event.start?.dateTime || event.start?.date,
-        end: event.end?.dateTime || event.end?.date,
-        description: event.description || "",
-        allDay: !event.start?.dateTime,
-      }));
-      setEvents(formattedEvents);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
-  useEffect(() => {
-    getEvents();
-  }, []);
-
-  // Navigate Calendar
+  // Navigation handlers
   const handlePrev = () => {
     const calendarApi = calendarRef.current.getApi();
     calendarApi.prev();
@@ -56,7 +34,6 @@ function Calendar() {
     setCalendarTitle(calendarApi.view.title);
   };
 
-  // Change Calendar View
   const handleViewChange = (view) => {
     const calendarApi = calendarRef.current.getApi();
     calendarApi.changeView(view);
@@ -70,13 +47,26 @@ function Calendar() {
     setCalendarTitle(calendarApi.view.title);
   };
 
-  // Update title when dates change
   const handleDatesSet = (dateInfo) => {
     setCalendarTitle(dateInfo.view.title);
   };
 
+  // Event click handler
+  const handleEventClick = (info) => {
+    const clickedEvent = {
+      id: info.event.id,
+      title: info.event.title || "Untitled Event",
+      start: info.event.start || "No start time",
+      end: info.event.end || "No end time",
+      description: info.event.extendedProps.description || "No description",
+      allDay: info.event.allDay,
+    };
+    setSelectedEvent(clickedEvent);
+    setShowEventModal(true);
+  };
+
   return (
-    <div className="calendar-container">
+    <div className="calendar-container content">
       <div className="custom-toolbar">
         <button className="today-button" onClick={handleToday}>
           Today
@@ -120,8 +110,8 @@ function Calendar() {
         </div>
       </div>
 
-      {/* FullCalendar */}
       <FullCalendar
+        eventClick={handleEventClick}
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -151,6 +141,13 @@ function Calendar() {
             scrollTime: "08:00:00",
           },
         }}
+      />
+      <EventModal
+        show={showEventModal}
+        handleClose={() => setShowEventModal(false)}
+        event={selectedEvent}
+        accessToken={accessToken}
+        refreshEvents={refreshEvents}
       />
     </div>
   );

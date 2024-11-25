@@ -1,0 +1,12 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+.close-btn {
+  font-size: 2rem;
+  color: $seconday-black;
+}
+.close-btn:hover {
+  color: $primary-black;
+}

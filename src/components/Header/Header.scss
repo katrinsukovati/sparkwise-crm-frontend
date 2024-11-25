@@ -7,46 +7,58 @@
 // $desktop-breakpoint: 1280px;
 
 .sidebar {
-  @include sidebar-styles;
+  position: fixed;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  transition: 0.5s;
+  height: 100%;
+  overflow-y: auto;
+
   //   Hiding the side bar on mobile by default
   width: 0;
-  //   Spacing for the logo
-  padding-top: 60px;
+  top: 0;
+  left: -250px;
+  width: 200px;
+  overflow-y: auto;
+  padding-top: 4rem;
+  z-index: 1000;
 
-  // When the nav bar opens, set the width
   &.open {
-    width: 250px;
+    left: 0px;
   }
 
-  /* Desktop styles */
+  /* Tablet and desktop styles */
   @include tablet {
-    height: 95%;
-    width: 200px;
+    position: relative;
     margin-top: 1rem;
     margin-left: 1rem;
     border-radius: 1.5rem;
-    overflow-x: visible;
+    left: 0;
     padding-top: 0;
+    height: 95%;
   }
 
-  &__img {
-    max-width: 150px;
-    max-height: 60px;
+  &__ul {
+    list-style: none;
+    padding-top: 2rem;
+  }
+
+  &__item {
+    margin: 1rem 0;
   }
 
   &__logo {
+    max-width: 8rem;
     margin-bottom: 1rem;
   }
+}
 
-  &__links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  &__logout {
-    width: 150px;
+.menu-button {
+  @include tablet {
+    display: none;
   }
 }
 
