@@ -76,7 +76,6 @@ function Calendar({ events, refreshEvents, accessToken }) {
               </button>
             </div>
             <div>
-              {" "}
               <div className="navigation__title">
                 <button className="nav-button" onClick={handlePrev}>
                   <FaArrowLeft />
@@ -90,7 +89,7 @@ function Calendar({ events, refreshEvents, accessToken }) {
               </div>
               <div className="view-buttons">
                 <button
-                  className={`view-button ${
+                  className={`view-buttons__btn ${
                     currentView === "Month" ? "active" : ""
                   }`}
                   onClick={() => handleViewChange("dayGridMonth")}
@@ -98,7 +97,7 @@ function Calendar({ events, refreshEvents, accessToken }) {
                   Month
                 </button>
                 <button
-                  className={`view-button ${
+                  className={`view-buttons__btn ${
                     currentView === "Week" ? "active" : ""
                   }`}
                   onClick={() => handleViewChange("timeGridWeek")}
@@ -106,7 +105,7 @@ function Calendar({ events, refreshEvents, accessToken }) {
                   Week
                 </button>
                 <button
-                  className={`view-button ${
+                  className={`view-buttons__btn ${
                     currentView === "Day" ? "active" : ""
                   }`}
                   onClick={() => handleViewChange("timeGridDay")}

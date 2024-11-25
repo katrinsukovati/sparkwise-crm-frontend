@@ -37,7 +37,7 @@
 
 .navigation {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   justify-content: space-between;
 
@@ -48,12 +48,26 @@
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    width: 5rem;
+    min-width: 6rem;
     width: 100%;
+    font-size: 0.8rem;
+    @include tablet {
+      font-size: 1rem;
+      width: 6.5rem;
+    }
+    transition: transform 0.3s ease, background-color 0.3s ease;
+
+    &:hover {
+      background-color: $primary-dark-blue;
+      transform: scale(1.05);
+    }
   }
 
   &__title {
     display: flex;
+    text-align: center;
+    font-size: 0rem;
+    align-items: center;
   }
 }
 
@@ -66,42 +80,58 @@
   font-size: 1.5rem;
   color: $primary-blue;
   cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+
+  &:hover {
+    color: $primary-dark-blue;
+    transform: scale(1.05);
+  }
 }
 
 .calendar-title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
   margin: 0 15px;
+
+  @include tablet {
+    font-size: 1.5rem;
+  }
 }
 
 .view-buttons {
   display: flex;
   justify-content: center;
   margin-top: 0.5rem;
-}
 
-.view-button {
-  margin: 0 5px;
-  padding: 4px 8px;
-  border: 1px solid $primary-blue;
-  border-radius: 5px;
-  background: none;
-  cursor: pointer;
-  color: $primary-blue;
-}
+  &__btn {
+    border: 1px solid $primary-blue;
+    margin: 0 5px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: none;
+    cursor: pointer;
+    color: $primary-blue;
+    font-size: 0.8rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 
-.view-button.active {
-  background: $primary-blue;
-  color: $white;
-}
+    &:hover {
+      transform: scale(1.05);
+    }
 
-.nav-button:hover {
-  color: #0056b3;
+    @include tablet {
+      font-size: 1rem;
+    }
+
+    &.active {
+      background: $primary-blue;
+      color: $white;
+    }
+  }
 }
 
 .today-button:hover,
 .view-button:hover {
-  background: #0056b3;
+  background: $primary-dark-blue;
   color: $white;
 }
 
@@ -227,16 +257,4 @@
 .fc .fc-timegrid-col.fc-day-today .fc-timegrid-col-frame,
 .fc .fc-daygrid-day.fc-day-today {
   background-color: $light-blue;
-}
-
-.new-event-btn {
-  position: absolute;
-  left: 0;
-  transform: translateY(-50%);
-  background: $primary-blue;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
 }
