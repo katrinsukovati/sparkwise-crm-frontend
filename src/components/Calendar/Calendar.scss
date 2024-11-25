@@ -95,8 +95,8 @@
   margin: 0 15px;
 
   @include tablet {
-    width: 12.5rem;
-    font-size: 1.5rem;
+    min-width: 16.5rem;
+    font-size: 1.25rem;
   }
 }
 
