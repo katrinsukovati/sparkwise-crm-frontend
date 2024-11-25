@@ -10,7 +10,7 @@
 }
 
 .calendar-container {
-    height: 95vh;
+  height: 95vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -28,18 +28,6 @@
   margin-bottom: 1rem;
 }
 
-.today-button {
-  position: absolute;
-  left: 0;
-  transform: translateY(-50%);
-  background: $primary-blue;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .toolbar-center {
   display: flex;
   flex-direction: column;
@@ -50,6 +38,23 @@
 .navigation {
   display: flex;
   align-items: center;
+  width: 100%;
+  justify-content: space-between;
+
+  &__btn {
+    background: $primary-blue;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 5rem;
+    width: 100%;
+  }
+
+  &__title {
+    display: flex;
+  }
 }
 
 .nav-button {
@@ -222,4 +227,16 @@
 .fc .fc-timegrid-col.fc-day-today .fc-timegrid-col-frame,
 .fc .fc-daygrid-day.fc-day-today {
   background-color: $light-blue;
+}
+
+.new-event-btn {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+  background: $primary-blue;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }

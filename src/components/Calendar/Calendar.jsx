@@ -68,44 +68,57 @@ function Calendar({ events, refreshEvents, accessToken }) {
   return (
     <div className="calendar-container content">
       <div className="custom-toolbar">
-        <button className="today-button" onClick={handleToday}>
-          Today
-        </button>
         <div className="toolbar-center">
           <div className="navigation">
-            <button className="nav-button" onClick={handlePrev}>
-              <FaArrowLeft />
-            </button>
-            <span className="calendar-title">
-              {calendarTitle || "Loading..."}
-            </span>
-            <button className="nav-button" onClick={handleNext}>
-              <FaArrowRight />
-            </button>
-          </div>
-          <div className="view-buttons">
-            <button
-              className={`view-button ${
-                currentView === "Month" ? "active" : ""
-              }`}
-              onClick={() => handleViewChange("dayGridMonth")}
-            >
-              Month
-            </button>
-            <button
-              className={`view-button ${
-                currentView === "Week" ? "active" : ""
-              }`}
-              onClick={() => handleViewChange("timeGridWeek")}
-            >
-              Week
-            </button>
-            <button
-              className={`view-button ${currentView === "Day" ? "active" : ""}`}
-              onClick={() => handleViewChange("timeGridDay")}
-            >
-              Day
-            </button>
+            <div>
+              <button className="navigation__btn" onClick={handleToday}>
+                Today
+              </button>
+            </div>
+            <div>
+              {" "}
+              <div className="navigation__title">
+                <button className="nav-button" onClick={handlePrev}>
+                  <FaArrowLeft />
+                </button>
+                <span className="calendar-title">
+                  {calendarTitle || "Loading..."}
+                </span>
+                <button className="nav-button" onClick={handleNext}>
+                  <FaArrowRight />
+                </button>
+              </div>
+              <div className="view-buttons">
+                <button
+                  className={`view-button ${
+                    currentView === "Month" ? "active" : ""
+                  }`}
+                  onClick={() => handleViewChange("dayGridMonth")}
+                >
+                  Month
+                </button>
+                <button
+                  className={`view-button ${
+                    currentView === "Week" ? "active" : ""
+                  }`}
+                  onClick={() => handleViewChange("timeGridWeek")}
+                >
+                  Week
+                </button>
+                <button
+                  className={`view-button ${
+                    currentView === "Day" ? "active" : ""
+                  }`}
+                  onClick={() => handleViewChange("timeGridDay")}
+                >
+                  Day
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <button className="navigation__btn">Add Event</button>
+            </div>
           </div>
         </div>
       </div>
