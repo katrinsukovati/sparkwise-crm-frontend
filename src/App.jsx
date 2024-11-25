@@ -11,10 +11,14 @@ import LoginPage from "././pages/LoginPage/LoginPage.jsx";
 // Import components
 import Header from "./components/Header/Header.jsx";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const [accessToken, setAccessToken] = useState(null);
   return (
     <>
+      <ToastContainer theme="colored" />
       {!accessToken ? (
         <LoginPage onLoginSuccess={(token) => setAccessToken(token)} />
       ) : (

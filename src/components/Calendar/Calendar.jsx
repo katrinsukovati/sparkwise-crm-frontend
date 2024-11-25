@@ -6,6 +6,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import EventModal from "../EventModal/EventModal";
+import AddEventModal from "../AddEventModal/AddEventModal";
 
 function Calendar({ events, refreshEvents, accessToken }) {
   const calendarRef = useRef(null);
@@ -14,6 +15,7 @@ function Calendar({ events, refreshEvents, accessToken }) {
 
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
 
   // Navigation handlers
   const handlePrev = () => {
@@ -116,7 +118,12 @@ function Calendar({ events, refreshEvents, accessToken }) {
             </div>
 
             <div>
-              <button className="navigation__btn">Add Event</button>
+              <button
+                className="navigation__btn"
+                onClick={() => setShowAddEventModal(true)}
+              >
+                Add Event
+              </button>
             </div>
           </div>
         </div>
@@ -160,6 +167,12 @@ function Calendar({ events, refreshEvents, accessToken }) {
         event={selectedEvent}
         accessToken={accessToken}
         refreshEvents={refreshEvents}
+      />
+      <AddEventModal
+        show={showAddEventModal}
+        handleClose={() => setShowAddEventModal(false)}
+        refreshEvents={refreshEvents}
+        accessToken={accessToken}
       />
     </div>
   );

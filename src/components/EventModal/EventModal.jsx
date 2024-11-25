@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -126,7 +126,6 @@ function EventModal({ show, handleClose, event, accessToken, refreshEvents }) {
 
   return (
     <>
-      <ToastContainer theme="colored" />
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header>
           <Modal.Title>Event Details</Modal.Title>
