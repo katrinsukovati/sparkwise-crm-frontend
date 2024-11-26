@@ -1,4 +1,5 @@
 import "./ClientList.scss";
+import chevronIcon from "../../assets/icons/chevron_right-24px.svg";
 
 function ClientList({ clients }) {
   return (
@@ -9,8 +10,13 @@ function ClientList({ clients }) {
             <div className="client-item">
               <div className="client-item__name-container">
                 <p className="client-item__name label">
-                  {c.parent_first_name + c.parent_last_name}
+                  {c.parent_first_name + " " + c.parent_last_name}
                 </p>
+                <img
+                  src={chevronIcon}
+                  alt="arrow icon"
+                  className="client-icon"
+                />
               </div>
               <div className="client-item__phone-container">
                 <p className="client-item__phone label">{c.parent_phone}</p>
