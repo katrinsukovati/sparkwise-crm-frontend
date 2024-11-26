@@ -11,14 +11,20 @@ function PaginationFooter({
   const startIndex = (currentPage - 1) * itemsPerPage + 1;
   const endIndex = Math.min(startIndex + itemsPerPage - 1, totalEntries);
 
+  // this generates the amount of pages and also ensures that only 3 page numbers are showing at a time
   const generatePageNumbers = () => {
     const pageNumbers = [];
-    const maxVisiblePages = 7;
-    const startPage = Math.max(
-      1,
-      currentPage - Math.floor(maxVisiblePages / 2)
-    );
-    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    const maxVisiblePages = 3;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      if (startPage === 1) {
+        endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      } else if (endPage === totalPages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+    }
 
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
