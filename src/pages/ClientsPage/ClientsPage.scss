@@ -1,2 +1,15 @@
 @use "../../styles/partials/mixins" as *;
 @use "../../styles/partials/variables" as *;
+
+.main-container {
+  background-color: $white;
+  border-radius: 1rem;
+  display: flex;
+  padding: 0.5rem !important;
+  height: 95vh;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+}

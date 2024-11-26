@@ -1,4 +1,3 @@
-import "../CalendarPage/CalendarPage.scss";
 import Calendar from "../../components/Calendar/Calendar";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -48,7 +47,7 @@ function CalendarPage({ accessToken }) {
 
   return (
     <>
-      <div className="calendar-container content">
+      <div className="main-container content">
         <Calendar
           events={events}
           accessToken={accessToken}
