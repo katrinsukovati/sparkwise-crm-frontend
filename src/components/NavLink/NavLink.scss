@@ -3,9 +3,6 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/typography" as *;
 
-// $tablet-breakpoint: 768px;
-// $desktop-breakpoint: 1280px;
-
 .container {
   display: flex;
   align-items: center;
@@ -14,7 +11,7 @@
   color: $grey-inactive-nav;
   transition: $transition;
   padding: 0.5rem 1rem;
-  gap: 0.5rem;
+  gap: 0.45rem;
 
   &:hover {
     color: $primary-blue;
