@@ -3,16 +3,23 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/typography" as *;
 
-.clients-header {
+.clients {
+  &__list {
+    list-style: none;
+    margin-top: 1rem;
+  }
+}
+
+.client-item {
   display: flex;
   justify-content: space-between;
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 0.6875rem 2rem;
+  padding: 1.5rem 2rem;
   font-size: 0.75rem;
-  margin-top: 0.7rem;
-  color: #b5b7c0;
+  color: $primary-black;
+  border-top: 0.1px solid #eeeeee;
   div {
     flex: 1;
     text-align: center;

@@ -1,5 +1,4 @@
 import "./ClientListHeader.scss";
-import { FaSort } from "react-icons/fa";
 
 function ClientListHeader() {
   return (

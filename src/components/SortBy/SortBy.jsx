@@ -7,7 +7,11 @@ function SortBy({ options }) {
 
   return (
     <div className="sort-by">
-      <Select options={options} formatOptionLabel={formatOptionLabel} />
+      <Select
+        placeholder="Sort by:"
+        options={options}
+        formatOptionLabel={formatOptionLabel}
+      />
     </div>
   );
 }

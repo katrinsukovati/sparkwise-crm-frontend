@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Search from "../../components/Search/Search";
 import SortBy from "../../components/SortBy/SortBy";
 import TextButton from "../../components/TextButton/TextButton";
+import ClientList from "../../components/ClientList/ClientList";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -57,6 +58,7 @@ function ClientsPage() {
           </div>
         </div>
         <ClientListHeader />
+        <ClientList clients={clients} />
       </div>
     </div>
   );
