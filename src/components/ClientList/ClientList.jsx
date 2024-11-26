@@ -5,6 +5,8 @@ import PaginationFooter from "../PaginationFooter/PaginationFooter";
 import StatusLabel from "../StatusLabel/StatusLabel";
 
 function ClientList({ clients }) {
+
+  // For pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 

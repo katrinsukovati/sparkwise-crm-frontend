@@ -2,20 +2,20 @@ import "../ClientsPage/ClientsPage.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ClientListHeader from "../../components/ClientListHeader/ClientListHeader";
-import Button from "react-bootstrap/Button";
 import Search from "../../components/Search/Search";
 import SortBy from "../../components/SortBy/SortBy";
-import TextButton from "../../components/TextButton/TextButton";
 import ClientList from "../../components/ClientList/ClientList";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
 function ClientsPage() {
   const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // Get Clients
+  // for searching:
+  const [filteredClients, setFilteredClients] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // get all clients
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -25,17 +25,34 @@ function ClientsPage() {
       } catch (error) {
         console.error("Failed to fetch clients:", error);
         setError("Failed to fetch clients. Please try again.");
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchClients();
   }, []);
 
+  // handle search
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      // reset to full client list if search is empty
+      setFilteredClients(clients);
+    } else {
+      // filter clients based on search query
+      const query = searchQuery.toLowerCase();
+      const filtered = clients.filter((client) =>
+        Object.values(client).join(" ").toLowerCase().includes(query)
+      );
+      setFilteredClients(filtered);
+    }
+  }, [searchQuery, clients]);
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   return (
     <div className="content">
-      <div className="title">Clients ({clients.length})</div>
+      <div className="title">Clients ({filteredClients.length})</div>
       <div className="client-list-container">
         <div className="actions">
           <div className="actions__add">
@@ -43,7 +60,7 @@ function ClientsPage() {
           </div>
           <div className="actions__search-sort-container">
             <div className="actions__search">
-              <Search />
+              <Search handleSearchChange={handleSearchChange} />
             </div>
             <div className="actions__sort">
               <SortBy
@@ -58,7 +75,7 @@ function ClientsPage() {
           </div>
         </div>
         <ClientListHeader />
-        <ClientList clients={clients} />
+        <ClientList clients={filteredClients} />
       </div>
     </div>
   );
