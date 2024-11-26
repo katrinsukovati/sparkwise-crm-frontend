@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./ClientList.scss";
 import chevronIcon from "../../assets/icons/chevron_right-24px.svg";
 import PaginationFooter from "../PaginationFooter/PaginationFooter";
+import StatusLabel from "../StatusLabel/StatusLabel";
 
 function ClientList({ clients }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,7 +54,9 @@ function ClientList({ clients }) {
                 </p>
               </div>
               <div className="client-item__status-container">
-                <p className="client-item__status label">{c.status}</p>
+                <p className="client-item__status label">
+                  <StatusLabel text={c.status} />
+                </p>
               </div>
             </div>
           </li>

@@ -3,11 +3,6 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/typography" as *;
 
-@use "../../styles/partials/mixins" as *;
-@use "../../styles/partials/globals" as *;
-@use "../../styles/partials/variables" as *;
-@use "../../styles/partials/typography" as *;
-
 .clients {
   &__list {
     list-style: none;
@@ -55,9 +50,7 @@
       transition: transform 0.3s ease;
 
       &:hover {
-        transform: translateX(
-          4px
-        ); // Move the icon slightly to the right on hover
+        transform: translateX(4px);
       }
     }
   }
@@ -81,11 +74,11 @@
   }
 
   .client-icon {
-    transition: transform 0.3s ease; // Smooth animation for the icon
+    transition: transform 0.3s ease;
   }
 
   &:hover .client-icon {
-    transform: translateX(4px); // Move the icon slightly to the right on hover
+    transform: translateX(4px);
   }
 }
 
@@ -96,8 +89,8 @@
 .client-list {
   display: flex;
   flex-direction: column;
-  flex: 1; 
-  overflow: hidden; 
+  flex: 1;
+  overflow: hidden;
 
   .clients__list {
     flex: 1;

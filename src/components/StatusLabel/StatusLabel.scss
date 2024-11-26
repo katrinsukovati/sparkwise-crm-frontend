@@ -1,0 +1,74 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+.status-label {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px solid transparent;
+
+  width: 7.5rem;
+  height: 2rem;
+
+  // default style for unspecified status
+  &--default {
+    background-color: rgba(216, 216, 216, 0.61);
+    border-color: #979797;
+    color: #979797;
+  }
+
+  &--trial-scheduled {
+    background-color: rgba(63, 140, 255, 0.32);
+    color: #3f8cff;
+    border-color: #3f8cff;
+  }
+
+  &--form-submitted {
+    background-color: rgba(242, 34, 38, 0.38);
+    color: #c10f12;
+    border-color: #ff3b3e;
+  }
+
+  &--enrolled {
+    background-color: rgba(22, 192, 152, 0.38);
+    color: #008767;
+    border-color: #008767;
+  }
+
+  &--invoice-sent {
+    background-color: #ffddb3;
+    color: #f78900;
+    border-color: #f78900;
+  }
+
+  &--trial-completed {
+    background-color: rgba(196, 24, 230, 0.26);
+    border-color: #c418e6;
+    color: #c418e6;
+  }
+
+  &--cant-reach {
+    background-color: rgba(216, 216, 216, 0.61);
+    border-color: #979797;
+    color: #979797;
+  }
+
+  &--not-a-fit {
+    background-color: rgba(216, 216, 216, 0.61);
+    border-color: #979797;
+    color: #979797;
+  }
+
+  &--no-show {
+    background-color: rgba(216, 216, 216, 0.61);
+    border-color: #979797;
+    color: #979797;
+  }
+}
