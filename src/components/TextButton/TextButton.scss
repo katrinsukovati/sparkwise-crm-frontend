@@ -3,43 +3,14 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/typography" as *;
 
-.title {
-  font-size: 1.8rem;
-  font-weight: 600;
-}
-
-.main-container {
-  background-color: $white;
-  border-radius: 1rem;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem !important;
-  height: 95vh;
-}
-
-.actions {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem 2rem 0.5rem 2rem;
-
-  &__search-sort-container {
-    display: flex;
-    gap: 1.5rem;
-  }
-}
-
-.add-client-button {
+.text-btn {
   background-color: $primary-blue;
   border: none;
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
-  min-width: 8rem;
-  min-height: 2.5rem;
+  min-width: 6rem;
   width: 100%;
   font-size: 0.8rem;
   transition: transform 0.3s ease, background-color 0.3s ease;

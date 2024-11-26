@@ -7,6 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import EventModal from "../EventModal/EventModal";
 import AddEventModal from "../AddEventModal/AddEventModal";
+import TextButton from "../TextButton/TextButton";
 
 function Calendar({ events, refreshEvents, accessToken }) {
   const calendarRef = useRef(null);
@@ -73,9 +74,7 @@ function Calendar({ events, refreshEvents, accessToken }) {
         <div className="toolbar-center">
           <div className="navigation">
             <div>
-              <button className="navigation__btn" onClick={handleToday}>
-                Today
-              </button>
+              <TextButton text={"Today"} handleClick={handleToday} />
             </div>
             <div>
               <div className="navigation__title">
@@ -118,12 +117,10 @@ function Calendar({ events, refreshEvents, accessToken }) {
             </div>
 
             <div>
-              <button
-                className="navigation__btn"
-                onClick={() => setShowAddEventModal(true)}
-              >
-                Add Event
-              </button>
+              <TextButton
+                text={"Add Event"}
+                handleClick={() => setShowAddEventModal(true)}
+              />
             </div>
           </div>
         </div>

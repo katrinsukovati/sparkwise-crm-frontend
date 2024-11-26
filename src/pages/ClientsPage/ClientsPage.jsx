@@ -1,12 +1,18 @@
 import "../ClientsPage/ClientsPage.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import ClientListHeader from "../../components/ClientListHeader/ClientListHeader";
+import Button from "react-bootstrap/Button";
+import Search from "../../components/Search/Search";
+import SortBy from "../../components/SortBy/SortBy";
+import TextButton from "../../components/TextButton/TextButton";
 
-// import { GridComponent, ColumnsDirective, ColumnsDirective, Resize, Sort, ContextMenu}
 const URL = import.meta.env.VITE_BACKEND_URL;
 
 function ClientsPage() {
   const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Get Clients
   useEffect(() => {
@@ -14,7 +20,9 @@ function ClientsPage() {
       try {
         const response = await axios.get(`${URL}/clients`);
         setClients(response.data);
+        console.log("Fetched clients:", response.data);
       } catch (error) {
+        console.error("Failed to fetch clients:", error);
         setError("Failed to fetch clients. Please try again.");
       } finally {
         setLoading(false);
@@ -26,9 +34,30 @@ function ClientsPage() {
 
   return (
     <div className="content">
-      {/* this will be a real client number, for now just template */}
-      <div className="title">Clients (143) </div>
-      <div className="main-container"></div>
+      <div className="title">Clients ({clients.length})</div>
+      <div className="main-container">
+        <div className="actions">
+          <div className="actions__add">
+            <button className="add-client-button">+ Add Client</button>
+          </div>
+          <div className="actions__search-sort-container">
+            <div className="actions__search">
+              <Search />
+            </div>
+            <div className="actions__sort">
+              <SortBy
+                options={[
+                  { value: "newest", label: "Newest" },
+                  { value: "oldest", label: "Oldest" },
+                  { value: "status", label: "Status" },
+                  { value: "grade", label: "Grade" },
+                ]}
+              />
+            </div>
+          </div>
+        </div>
+        <ClientListHeader />
+      </div>
     </div>
   );
 }

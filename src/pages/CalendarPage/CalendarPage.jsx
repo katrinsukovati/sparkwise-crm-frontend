@@ -1,6 +1,7 @@
 import Calendar from "../../components/Calendar/Calendar";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "./calendarPage.scss"
 
 function CalendarPage({ accessToken }) {
   const [events, setEvents] = useState([]);

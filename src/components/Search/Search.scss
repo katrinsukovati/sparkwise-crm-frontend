@@ -1,0 +1,41 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 5px;
+  padding: 0.28rem 1rem;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #cccccc;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  max-height: 2.4rem;
+
+  &:hover,
+  &:active {
+    border: 1.5px solid #2584ff;
+  }
+
+  .search-icon {
+    color: #cccccc;
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+  }
+
+  .search-input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 0.25rem 0;
+
+    &::placeholder {
+      color: #807f7f;
+    }
+  }
+}
