@@ -3,9 +3,10 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/typography" as *;
 
-.title {
-  font-size: 1.8rem;
-  font-weight: 600;
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; // Full viewport height
 }
 
 .main-container {
@@ -13,8 +14,9 @@
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
-  padding: 0.5rem !important;
-  height: 95vh;
+  flex: 1; // Takes up all available vertical space
+  padding: 0.5rem;
+  overflow: hidden; // Prevents unintended scrolling
 }
 
 .actions {
@@ -23,7 +25,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 2rem 0.5rem 2rem;
+  padding: 1rem 2rem 0.5rem 2rem;
 
   &__search-sort-container {
     display: flex;
@@ -40,14 +42,9 @@
   cursor: pointer;
   min-width: 8rem;
   min-height: 2.5rem;
-  width: 100%;
   font-size: 0.8rem;
   transition: transform 0.3s ease, background-color 0.3s ease;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  @include tablet {
-    font-size: 1rem;
-    width: 6.5rem;
-  }
 
   &:hover {
     background-color: $primary-dark-blue;
