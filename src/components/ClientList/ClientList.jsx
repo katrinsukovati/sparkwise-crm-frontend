@@ -5,26 +5,7 @@ import PaginationFooter from "../PaginationFooter/PaginationFooter";
 
 function ClientList({ clients }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(8);
-
-  // This is for pagination
-  useEffect(() => {
-    // this adjusts the amount of items per page based on screen size
-    const updateItemsPerPage = () => {
-      if (window.innerWidth > 1600) {
-        setItemsPerPage(9);
-      } else if (window.innerWidth > 1200) {
-        setItemsPerPage(6);
-      } else {
-        setItemsPerPage(5);
-      }
-    };
-
-    updateItemsPerPage();
-    window.addEventListener("resize", updateItemsPerPage);
-
-    return () => window.removeEventListener("resize", updateItemsPerPage);
-  }, []);
+  const itemsPerPage = 10;
 
   const totalPages = Math.ceil(clients.length / itemsPerPage);
   const currentClients = clients.slice(

@@ -36,7 +36,7 @@ function ClientsPage() {
   return (
     <div className="content">
       <div className="title">Clients ({clients.length})</div>
-      <div className="main-container">
+      <div className="client-list-container">
         <div className="actions">
           <div className="actions__add">
             <button className="add-client-button">+ Add Client</button>

@@ -96,16 +96,16 @@
 .client-list {
   display: flex;
   flex-direction: column;
-  flex: 1; // Fills the remaining space in `main-container`
-  overflow: hidden; // Prevents unintended scrolling
+  flex: 1; 
+  overflow: hidden; 
 
   .clients__list {
-    flex: 1; // Ensures the list grows to fill space
-    overflow-y: auto; // Enables scrolling for the list items
+    flex: 1;
+    overflow-y: auto;
   }
 
   .pagination-footer {
-    flex-shrink: 0; // Prevents the footer from shrinking
+    flex-shrink: 0;
     padding: 1rem 2rem;
   }
 }

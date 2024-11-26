@@ -6,17 +6,22 @@
 .content {
   display: flex;
   flex-direction: column;
-  height: 100vh; // Full viewport height
+  height: 100vh;
 }
 
-.main-container {
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.client-list-container {
   background-color: $white;
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
-  flex: 1; // Takes up all available vertical space
+  flex: 1;
   padding: 0.5rem;
-  overflow: hidden; // Prevents unintended scrolling
+  overflow: hidden;
 }
 
 .actions {
