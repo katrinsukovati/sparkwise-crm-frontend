@@ -5,40 +5,40 @@ import ClientListHeader from "../../components/ClientListHeader/ClientListHeader
 import Search from "../../components/Search/Search";
 import SortBy from "../../components/SortBy/SortBy";
 import ClientList from "../../components/ClientList/ClientList";
+import ClientModal from "../../components/ClientModal/ClientModal";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
 function ClientsPage() {
-  // state for search, sort, clients, and pagination
+  // states for search, sort, and clients
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("newest");
   const [clients, setClients] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   // get all clients
+  const fetchClients = async () => {
+    try {
+      const response = await axios.get(`${URL}/clients`, {
+        params: {
+          search: searchQuery,
+          sortBy: sortOption,
+        },
+      });
+      setClients(response.data);
+    } catch (error) {
+      console.error("Failed to fetch clients:", error);
+    }
+  };
+
+  // get clients when search query or sort option changes
   useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const response = await axios.get(`${URL}/clients`, {
-          params: {
-            search: searchQuery,
-            sortBy: sortOption,
-          },
-        });
-        setClients(response.data); // update state with fetched clients
-        setCurrentPage(1); // reset to the first page on new fetch
-      } catch (error) {
-        console.error("Failed to fetch clients:", error);
-      }
-    };
-
     fetchClients();
-  }, [searchQuery, sortOption]); // refetch when searchQuery or sortOption changes
+  }, [searchQuery, sortOption]);
 
-  // handle search input when user types
+  // this handles search input
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1); // reset to the first page on search
   };
 
   return (
@@ -47,7 +47,12 @@ function ClientsPage() {
       <div className="client-list-container">
         <div className="actions">
           <div className="actions__add">
-            <button className="add-client-button">+ Add Client</button>
+            <button
+              className="add-client-button"
+              onClick={() => setShowAddModal(true)}
+            >
+              + Add Client
+            </button>
           </div>
           <div className="actions__search-sort-container">
             <div className="actions__search">
@@ -65,12 +70,14 @@ function ClientsPage() {
           </div>
         </div>
         <ClientListHeader />
-        <ClientList
-          clients={clients}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
+        <ClientList clients={clients} />
       </div>
+      <ClientModal
+        show={showAddModal} // show or hide the modal
+        handleClose={() => setShowAddModal(false)} // close modal
+        mode="add" // specify the mode - either add or edit
+        refreshClients={fetchClients} // pass fetchClients to refresh list on save/edit
+      />
     </div>
   );
 }

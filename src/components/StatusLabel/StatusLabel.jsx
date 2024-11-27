@@ -7,7 +7,7 @@ function StatusLabel({ text }) {
     "invoice sent": "status-label--invoice-sent",
     "trial completed": "status-label--trial-completed",
     "trial scheduled": "status-label--trial-scheduled",
-    "form submitted": "status-label--form-submitted",
+    "new lead": "status-label--new-lead",
     enrolled: "status-label--enrolled",
     "can't reach": "status-label--cant-reach",
     "not a fit": "status-label--not-a-fit",
