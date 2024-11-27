@@ -1,26 +1,32 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import "./ClientList.scss";
 import chevronIcon from "../../assets/icons/chevron_right-24px.svg";
 import PaginationFooter from "../PaginationFooter/PaginationFooter";
 import StatusLabel from "../StatusLabel/StatusLabel";
 
-function ClientList({ clients }) {
-
-  // For pagination
-  const [currentPage, setCurrentPage] = useState(1);
+function ClientList({ clients, currentPage, setCurrentPage }) {
   const itemsPerPage = 10;
-
   const totalPages = Math.ceil(clients.length / itemsPerPage);
+
+  // calculate the clients to display on the current page
   const currentClients = clients.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
+  // handle page changes
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
+
+  useEffect(() => {
+    // ensure currentPage is valid when the number of pages changes
+    if (currentPage > totalPages) {
+      setCurrentPage(1); // reset to page 1 if out of bounds
+    }
+  }, [totalPages, currentPage, setCurrentPage]);
 
   return (
     <div className="client-list">

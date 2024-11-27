@@ -9,50 +9,41 @@ import ClientList from "../../components/ClientList/ClientList";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
 function ClientsPage() {
-  const [clients, setClients] = useState([]);
-
-  // for searching:
-  const [filteredClients, setFilteredClients] = useState([]);
+  // state for search, sort, clients, and pagination
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("newest");
+  const [clients, setClients] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // get all clients
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await axios.get(`${URL}/clients`);
-        setClients(response.data);
-        console.log("Fetched clients:", response.data);
+        const response = await axios.get(`${URL}/clients`, {
+          params: {
+            search: searchQuery,
+            sortBy: sortOption,
+          },
+        });
+        setClients(response.data); // update state with fetched clients
+        setCurrentPage(1); // reset to the first page on new fetch
       } catch (error) {
         console.error("Failed to fetch clients:", error);
-        setError("Failed to fetch clients. Please try again.");
       }
     };
 
     fetchClients();
-  }, []);
+  }, [searchQuery, sortOption]); // refetch when searchQuery or sortOption changes
 
-  // handle search
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      // reset to full client list if search is empty
-      setFilteredClients(clients);
-    } else {
-      // filter clients based on search query
-      const query = searchQuery.toLowerCase();
-      const filtered = clients.filter((client) =>
-        Object.values(client).join(" ").toLowerCase().includes(query)
-      );
-      setFilteredClients(filtered);
-    }
-  }, [searchQuery, clients]);
-
+  // handle search input when user types
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1); // reset to the first page on search
   };
 
   return (
     <div className="content">
-      <div className="title">Clients ({filteredClients.length})</div>
+      <div className="title">Clients ({clients.length})</div>
       <div className="client-list-container">
         <div className="actions">
           <div className="actions__add">
@@ -67,15 +58,18 @@ function ClientsPage() {
                 options={[
                   { value: "newest", label: "Newest" },
                   { value: "oldest", label: "Oldest" },
-                  { value: "status", label: "Status" },
-                  { value: "grade", label: "Grade" },
                 ]}
+                onChange={setSortOption}
               />
             </div>
           </div>
         </div>
         <ClientListHeader />
-        <ClientList clients={filteredClients} />
+        <ClientList
+          clients={clients}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </div>
   );
