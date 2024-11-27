@@ -7,7 +7,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import { IoClose } from "react-icons/io5";
 import "./AddEventModal.scss";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function AddEventModal({ show, handleClose, accessToken, refreshEvents }) {
@@ -70,8 +70,8 @@ function AddEventModal({ show, handleClose, accessToken, refreshEvents }) {
         }
       );
 
-      refreshEvents(); // Refresh events on the calendar
-      handleClose(); // Close modal
+      refreshEvents(); 
+      handleClose(); 
       toast.success("Event has been added successfully!");
     } catch (error) {
       console.error("Error adding event:", error);

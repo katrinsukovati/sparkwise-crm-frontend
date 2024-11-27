@@ -1,15 +1,29 @@
+import { useState } from "react";
 import "./ClientList.scss";
 import chevronIcon from "../../assets/icons/chevron_right-24px.svg";
 import StatusLabel from "../StatusLabel/StatusLabel";
+import ClientModal from "../ClientModal/ClientModal";
 
-function ClientList({ clients }) {
+function ClientList({ clients, refreshClients }) {
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const handleClientClick = (client) => {
+    setSelectedClient(client);
+    setShowEditModal(true);
+  };
+
   return (
     <div className="client-list">
       <ul className="clients__list">
         {clients.map((c) => (
           <li key={c.id} className="client__item">
             <div className="client-item">
-              <div className="client-item__name-container">
+              <div
+                className="client-item__name-container"
+                onClick={() => handleClientClick(c)}
+                style={{ cursor: "pointer" }}
+              >
                 <p className="client-item__name label">
                   {c.parent_first_name + " " + c.parent_last_name}
                 </p>
@@ -45,6 +59,16 @@ function ClientList({ clients }) {
           </li>
         ))}
       </ul>
+      {/* Client Modal */}
+      {selectedClient && (
+        <ClientModal
+          show={showEditModal}
+          handleClose={() => setShowEditModal(false)}
+          mode="edit"
+          client={selectedClient}
+          refreshClients={refreshClients}
+        />
+      )}
     </div>
   );
 }

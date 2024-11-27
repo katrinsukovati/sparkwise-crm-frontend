@@ -43,7 +43,6 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
     { value: "can't reach", label: "Can't Reach" },
     { value: "not a fit", label: "Not a Fit" },
     { value: "no show", label: "No Show" },
-    { value: "registration form filled", label: "Registration Form Filled" },
   ];
 
   useEffect(() => {
@@ -97,12 +96,15 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
         subjects_interested: form.subjects_interested.join(", "),
       };
 
-      await axios.post(`${URL}/clients`, payload);
-      toast.success(
-        mode === "add"
-          ? "Client added successfully!"
-          : "Client updated successfully!"
-      );
+      if (mode === "add") {
+        await axios.post(`${URL}/clients`, payload);
+        toast.success("Client added successfully!");
+      } else if (mode === "edit" && client?.id) {
+        await axios.put(`${URL}/clients/${client.id}`, payload);
+        toast.success("Client updated successfully!");
+      } else {
+        toast.error("Invalid mode or missing client ID");
+      }
       refreshClients();
       handleClose();
     } catch (error) {
@@ -113,7 +115,6 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
 
   return (
     <>
-      <ToastContainer />
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header>
           <Modal.Title style={{ fontSize: "1.4rem" }}>

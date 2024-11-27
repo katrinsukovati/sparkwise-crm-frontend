@@ -70,7 +70,7 @@ function ClientsPage() {
           </div>
         </div>
         <ClientListHeader />
-        <ClientList clients={clients} />
+        <ClientList clients={clients} refreshClients={fetchClients} />
       </div>
       <ClientModal
         show={showAddModal} // show or hide the modal
