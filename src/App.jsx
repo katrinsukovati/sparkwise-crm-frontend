@@ -19,25 +19,25 @@ function App() {
   return (
     <>
       <ToastContainer theme="colored" />
-      {/* {!accessToken ? (
+      {!accessToken ? (
         <LoginPage onLoginSuccess={(token) => setAccessToken(token)} />
-      ) : ( */}
-      <div className="app">
-        <BrowserRouter>
-          <Header />
-          <Routes>
-            {/* Main pages */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/clients" element={<ClientsPage />} />
-            <Route
-              path="/calendar"
-              element={<CalendarPage accessToken={accessToken} />}
-            />
-          </Routes>
-        </BrowserRouter>
-      </div>
-      {/* )} */}
+      ) : (
+        <div className="app">
+          <BrowserRouter>
+            <Header />
+            <Routes>
+              {/* Main pages */}
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/clients" element={<ClientsPage />} />
+              <Route
+                path="/calendar"
+                element={<CalendarPage accessToken={accessToken} />}
+              />
+            </Routes>
+          </BrowserRouter>
+        </div>
+      )}
     </>
   );
 }

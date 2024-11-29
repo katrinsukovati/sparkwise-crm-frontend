@@ -113,6 +113,23 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`${URL}/clients/${client?.id}`);
+      if (response.status === 204) {
+        toast.success(
+          `Successfully deleted client ${client.parent_first_name} ${client.parent_last_name}.`
+        );
+      }
+      refreshClients();
+      handleClose();
+    } catch (error) {
+      toast.error(
+        `Error deleting ${client.parent_first_name} ${client.parent_last_name} with ID ${client.id}.`
+      );
+    }
+  };
+
   return (
     <>
       <Modal show={show} onHide={handleClose} centered>
@@ -312,13 +329,16 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={handleClose}
-            style={{ padding: "0.5rem 1rem", fontSize: "0.85rem" }}
-          >
-            Cancel
-          </Button>
+          {mode === "edit" && (
+            <Button
+              variant="danger"
+              onClick={handleDelete}
+              style={{ padding: "0.5rem 1rem", fontSize: "0.85rem" }}
+            >
+              Delete Client
+            </Button>
+          )}
+
           <Button
             variant="primary"
             onClick={handleSave}
