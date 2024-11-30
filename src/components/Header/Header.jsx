@@ -2,7 +2,6 @@ import "./Header.scss";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo/sparkwise-logo.svg";
-import { IoGrid } from "react-icons/io5";
 import NavLink from "../NavLink/NavLink";
 import { FaCalendar } from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
@@ -10,7 +9,6 @@ import { RiGraduationCapFill } from "react-icons/ri";
 import { IoBriefcase } from "react-icons/io5";
 import { GrPersonalComputer } from "react-icons/gr";
 import { BsCreditCardFill } from "react-icons/bs";
-import { FiLogOut } from "react-icons/fi";
 import { FaBars } from "react-icons/fa6";
 
 function Header() {
@@ -60,13 +58,6 @@ function Header() {
             <Link to={"/"}>
               <img className="sidebar__logo" src={logo} alt="SparkWise Logo" />
             </Link>
-            <li className="sidebar__item">
-              <NavLink
-                icon={<IoGrid className="icon" />}
-                text={"Dashboard"}
-                to={"/dashboard"}
-              />
-            </li>
             <li className="sidebar__item">
               <NavLink
                 icon={<FaCalendar className="icon" />}

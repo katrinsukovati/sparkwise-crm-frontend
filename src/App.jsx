@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage/DashboardPage.jsx";
 import ClientsPage from "./pages/ClientsPage/ClientsPage.jsx";
 import CalendarPage from "./pages/CalendarPage/CalendarPage.jsx";
+import ClassesPage from "./pages/ClassesPage/ClassesPage.jsx";
 import "./styles/partials/_globals.scss";
 
 import { useState } from "react";
@@ -27,13 +28,13 @@ function App() {
             <Header />
             <Routes>
               {/* Main pages */}
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/clients" element={<ClientsPage />} />
+              <Route path="/" element={<Navigate to="/calendar" replace />} />
               <Route
                 path="/calendar"
                 element={<CalendarPage accessToken={accessToken} />}
               />
+              <Route path="/clients" element={<ClientsPage />} />
+              <Route path="/classes" element={<ClassesPage />} />
             </Routes>
           </BrowserRouter>
         </div>
