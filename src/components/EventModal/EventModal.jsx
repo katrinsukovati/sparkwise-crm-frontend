@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import { DateTime } from "luxon";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -26,7 +27,7 @@ const EventModal = ({
     endTime: "",
     attendees: [],
     description: "",
-    zoomOption: "none", // 'none', 'provide', or 'generate'
+    zoomOption: "none", // options are either: 'none', 'provide', or 'generate'
     zoomLink: "",
     recurringEventId: false,
     isRecurring: false,
@@ -34,7 +35,7 @@ const EventModal = ({
     recurrenceEndType: "never",
     recurrenceEndDate: "",
     recurrenceOccurrences: "",
-    meetingType: "", // New field to track type of meeting
+    meetingType: "",
   };
 
   // Options for events in regards to their reccurance
@@ -60,7 +61,6 @@ const EventModal = ({
           location,
           description,
           recurringEventId = false,
-          recurrence = [],
         } = event;
         // Process recurrence details
         const recurrenceDays =
@@ -101,21 +101,26 @@ const EventModal = ({
         const recurrenceOccurrences =
           event.recurrence?.[0]?.match(/COUNT=(\d+)/)?.[1] || "";
 
+        // Ensure start and end are parsed from Date objects
+        const startDateTime = DateTime.fromJSDate(new Date(start), {
+          zone: "America/Toronto",
+        });
+        const endDateTime = DateTime.fromJSDate(new Date(end), {
+          zone: "America/Toronto",
+        });
+
         setForm({
           title: title || "",
-          // Dates must be converted since google sends it in UTC time zone
-          startDate: start ? new Date(start).toISOString().split("T")[0] : "",
-          startTime: start
-            ? new Date(start)
-                .toLocaleTimeString("en-US", { hour12: false })
-                .substring(0, 5)
+          startDate: startDateTime.isValid
+            ? startDateTime.toFormat("yyyy-MM-dd")
             : "",
-          endDate: end ? new Date(end).toISOString().split("T")[0] : "",
-          endTime: end
-            ? new Date(end)
-                .toLocaleTimeString("en-US", { hour12: false })
-                .substring(0, 5)
+          startTime: startDateTime.isValid
+            ? startDateTime.toFormat("HH:mm")
             : "",
+          endDate: endDateTime.isValid
+            ? endDateTime.toFormat("yyyy-MM-dd")
+            : "",
+          endTime: endDateTime.isValid ? endDateTime.toFormat("HH:mm") : "",
           attendees: attendees.map((attendee) => ({
             value: attendee.email,
             label: attendee.email,
@@ -135,31 +140,18 @@ const EventModal = ({
     }
   }, [show, mode, event]);
 
-  // Helper function to calculate end time
+  // Helper function to calculate end time and make sure when i send it back to google and zoom that its in UTC
   const calculateEndTime = (startDate, startTime, durationMinutes) => {
-    if (!startDate || !startTime || durationMinutes <= 0) return ""; // Ensure all required inputs are present
+    if (!startDate || !startTime || durationMinutes <= 0) return "";
 
-    // Parse the time into hours and minutes
-    const [hours, minutes] = startTime.split(":").map(Number);
+    const startDateTime = DateTime.fromISO(`${startDate}T${startTime}`, {
+      zone: "America/Toronto",
+    });
 
-    // Validate the parsed time
-    if (isNaN(hours) || isNaN(minutes) || hours > 23 || minutes > 59) return "";
+    if (!startDateTime.isValid) return "";
 
-    // Create a local date-time object
-    const [year, month, day] = startDate.split("-").map(Number); // Parse date
-    const startDateTime = new Date(year, month - 1, day, hours, minutes); // Local timezone
-
-    if (isNaN(startDateTime.getTime())) return ""; // Ensure the date is valid
-
-    // Add the duration to get the end time
-    const endDateTime = new Date(
-      startDateTime.getTime() + durationMinutes * 60000
-    );
-
-    // Format the end time as "HH:mm" in the local timezone
-    return endDateTime
-      .toLocaleTimeString("en-US", { hour12: false })
-      .substring(0, 5);
+    const endDateTime = startDateTime.plus({ minutes: durationMinutes });
+    return endDateTime.toFormat("HH:mm");
   };
 
   const handleInputChange = (e) => {
@@ -169,10 +161,24 @@ const EventModal = ({
       const updatedForm = {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
-        ...(name === "title" && { isTitleCustom: true }), // Mark title as custom
+        ...(name === "title" && { isTitleCustom: true }),
       };
 
-      // Update title dynamically if meetingType changes and title is not custom
+      const validateInput = (value, format, zone = "America/Toronto") => {
+        if (!value) return "";
+        const dt = DateTime.fromISO(value, { zone });
+        return dt.isValid ? dt.toFormat(format) : "";
+      };
+
+      // Validate the time and date
+      if (name === "startDate" || name === "endDate") {
+        updatedForm[name] = validateInput(value, "yyyy-MM-dd");
+      }
+      if (name === "startTime" || name === "endTime") {
+        updatedForm[name] = validateInput(value, "HH:mm");
+      }
+
+      // Update title dynamically if the meeting type changes
       if (name === "meetingType" && value === "trial" && !prev.isTitleCustom) {
         updatedForm.title = `SparkWise Trial Lesson${
           prev.attendees.length > 0 &&
@@ -284,7 +290,6 @@ const EventModal = ({
 
   // Generate a zoom link only if the user checks the box
   const generateZoomLink = async () => {
-    console.log("form: ", form);
     try {
       const attendees = form.attendees.map((attendee) => ({
         // Email is in the `value` field from react-select
@@ -328,7 +333,7 @@ const EventModal = ({
 
       // Once the form is all formatted, send it to the backend to generate a zoom link
       const response = await axios.post(
-        `${URL}/create-zoom-meeting`,
+        `${URL}/calendar/create-zoom-meeting`,
         meetingRequest
       );
 
@@ -342,7 +347,6 @@ const EventModal = ({
 
   // This handles saving an event
   const handleSave = async () => {
-    console.log(form);
     try {
       // The minimum an event needs is a title, start and end date and times
       if (
@@ -362,9 +366,18 @@ const EventModal = ({
         zoomLink = await generateZoomLink();
       }
 
-      // The times are only provided in UTC, hence, it must be offset by 5 hours to match our EST schedule
-      const startDateTime = `${form.startDate}T${form.startTime}:00-05:00`; // Replace -05:00 with dynamic offset if needed
-      const endDateTime = `${form.endDate}T${form.endTime}:00-05:00`; // Replace -05:00 with dynamic offset if needed
+      const startDateTime = DateTime.fromISO(
+        `${form.startDate}T${form.startTime}`,
+        { zone: "America/Toronto" }
+      )
+        .toUTC()
+        .toISO();
+
+      const endDateTime = DateTime.fromISO(`${form.endDate}T${form.endTime}`, {
+        zone: "America/Toronto",
+      })
+        .toUTC()
+        .toISO();
 
       // This will populate the recurrance rules which will be sent to the backend
       const recurrenceRules = [];
@@ -387,12 +400,13 @@ const EventModal = ({
           .join(",");
 
         if (form.recurrenceEndType === "date" && form.recurrenceEndDate) {
-          // End by a specific date
           recurrenceRules.push(
-            `RRULE:FREQ=WEEKLY;BYDAY=${daysOfWeek};UNTIL=${form.recurrenceEndDate.replace(
-              /-/g,
-              ""
-            )}T235959Z`
+            `RRULE:FREQ=WEEKLY;BYDAY=${daysOfWeek};UNTIL=${DateTime.fromISO(
+              form.recurrenceEndDate,
+              { zone: "America/Toronto" }
+            )
+              .toUTC()
+              .toFormat("yyyyMMdd'T'HHmmss'Z'")}`
           );
         } else if (
           form.recurrenceEndType === "occurrences" &&
@@ -594,7 +608,7 @@ const EventModal = ({
             </Form.Group>
           )}
 
-          {form.meetingType && (
+          {(form.meetingType || mode == "edit") && (
             <Row className="mb-3">
               <Col>
                 <Form.Group>
@@ -683,7 +697,9 @@ const EventModal = ({
                 checked={form.zoomOption === "none"}
                 onChange={handleInputChange}
                 inline
-                disabled={mode === "edit"}
+                disabled={
+                  mode === "edit" && form.zoomLink && form.zoomLink.length > 0
+                }
               />
               <Form.Check
                 type="radio"
