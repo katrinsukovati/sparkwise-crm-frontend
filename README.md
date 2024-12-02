@@ -1,10 +1,46 @@
-# My Capstone
+# My Capstone - SparkWise CRM
 
-## Setup
-1. Clone the repository: `git clone <repo-link>`
-2. Install dependencies: `npm install`
-3. Set environment variables in a `.env` file.
+## Deployed Links
+The app is fully deployed and accessible via the following links:
 
-## Run
-- Start the server: `npm start`
-- Access the app at: `http://localhost:8080`
+Frontend: https://sparkwise-crm.netlify.app/
+
+Backend: https://sparkwise-crm-backend-ad7664a817c3.herokuapp.com/
+
+## Limitations
+**Zoom Link Generation:**
+- This app is connected to a pro Zoom account, which is personal to my sister and me. Unfortunately, you won't be able to test the feature of generating Zoom links unless connected to our Zoom account.
+
+## Key Features of the App
+- Calendar View with Google Calendar and Zoom integration:
+  - Create, delete, and edit events.
+  - You can create recurring events.
+  - All attendees must be clients prior to creating a meeting. This prevents us from creating events without having the appropriate client information.
+  - Events created in the app are automatically added to my Google Calendar.
+  - All attendees receive an email with an invitation to the event.
+  - Deleting an event removes it from the Google Calendar and also notifies attendees of the cancellation.
+  - You can also generate Zoom meeting links for events.
+  - When an event with a Zoom link is deleted, the associated Zoom meeting is also removed automatically.
+  - Note: Due to the app's integration with my personal Zoom Pro account, you won't be able to test this feature directly.
+- Client List: Add, edit, and delete clients.
+- Student List: Add, edit, and delete students.
+
+## Recommended Testing Flow
+**1. Create a New Client:**
+- Navigate to the Clients page.
+- Add a new client using the "Add Client" button.
+- You can use your personal email when creating the client to see if the meeting invites work properly.
+
+**2. Create a Calendar Event:**
+- Navigate to the Calendar page.
+- Create a new event and assign it to the client you just created.
+- Note: You can use all features here except the "Generate Zoom Link" button.
+
+**3. Student Management:**
+- Navigate to the Students page to explore its functionality.
+- You can add, edit, and delete student records.
+
+
+
+
+
