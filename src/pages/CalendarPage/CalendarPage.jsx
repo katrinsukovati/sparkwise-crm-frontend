@@ -47,9 +47,6 @@ function CalendarPage({ accessToken }) {
             },
           }
         );
-
-        console.log("this is the regular response", response);
-
         // Separate events that require recurrence details
         const eventsRequiringRecurrence = response.data.items.filter(
           (event) => event.recurringEventId && !event.recurrence
@@ -78,9 +75,7 @@ function CalendarPage({ accessToken }) {
           recurrence:
             event.recurrence || recurrenceDetails[event.recurringEventId] || [], // Use fetched recurrence if needed
         }));
-
-        console.log("this is the formatted response", formattedEvents);
-
+        
         allEvents = [...allEvents, ...formattedEvents];
         nextPageToken = response.data.nextPageToken;
       } while (nextPageToken);

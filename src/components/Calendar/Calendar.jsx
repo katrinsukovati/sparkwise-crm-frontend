@@ -69,7 +69,6 @@ function Calendar({ events, refreshEvents, accessToken }) {
 
   // Event click handler
   const handleEventClick = (info) => {
-    console.log("handle event click", info);
     const clickedEvent = {
       id: info.event.id,
       title: info.event.title || "Untitled Event",

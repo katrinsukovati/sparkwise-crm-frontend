@@ -9,15 +9,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function LoginPage({ onLoginSuccess }) {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log("Login successful! Token:", tokenResponse);
       const userInfo = await axios.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         }
       );
-      console.log("User Info:", userInfo.data);
-
       // Pass the access token to the parent or store it globally
       onLoginSuccess(tokenResponse.access_token);
     },

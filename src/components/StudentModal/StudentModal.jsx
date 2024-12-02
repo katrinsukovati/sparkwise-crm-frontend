@@ -246,7 +246,6 @@ const StudentModal = ({
         // remove enrollments by id (must do it one by one)
         for (const enrollment of enrollmentsToRemove) {
           if (enrollment.enrollment_id) {
-            console.log(`Removing Enrollment ID: ${enrollment.enrollment_id}`);
             await axios.delete(
               `${URL}/class-enrollments/${enrollment.enrollment_id}`
             );

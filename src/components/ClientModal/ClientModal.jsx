@@ -59,7 +59,7 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
           postal_code: client.postal_code || "",
           subjects_interested: client.subjects_interested?.split(", ") || [],
           additional_notes: client.additional_notes || "",
-          status: client.status || "new lead",
+          status: client.status.toLowerCase() || "new lead",
           how_did_you_hear: client.how_did_you_hear || "",
         });
       } else {
