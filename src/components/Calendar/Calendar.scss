@@ -148,6 +148,10 @@
   color: $seconday-black !important;
   font-weight: 500;
   font-size: 0.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .fc .fc-timegrid-slot-label {
