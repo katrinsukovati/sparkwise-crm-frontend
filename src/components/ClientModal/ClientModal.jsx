@@ -308,7 +308,6 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
                     name="how_did_you_hear"
                     value={form.how_did_you_hear}
                     onChange={handleChange}
-                    style={{ padding: "0.25rem", fontSize: "0.85rem" }}
                   />
                 </Form.Group>
               </Col>

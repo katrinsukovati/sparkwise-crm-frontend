@@ -11,8 +11,9 @@
 }
 
 .client-item {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 1rem;
   align-items: center;
   width: 100%;
   padding: 1.5rem 2rem;
@@ -22,8 +23,9 @@
   border-bottom: 0.1px solid #eeeeee;
 
   div {
-    flex: 1;
     text-align: center;
+    overflow: hidden;
+    word-wrap: break-word;
   }
 
   &:hover {
