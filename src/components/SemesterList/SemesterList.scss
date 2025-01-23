@@ -1,0 +1,84 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+.semesters {
+  &__list {
+    list-style: none;
+    margin-top: 1rem;
+    padding: 0;
+  }
+}
+
+.semester__item {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  font-size: 0.875rem;
+  color: $primary-black;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $hover-client-bg;
+  }
+}
+
+.semester-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* Adjust column sizes for alignment */
+  align-items: center;
+  width: 100%;
+}
+
+.semester-item__name-container {
+  display: flex;
+  align-items: center;
+
+  .semester-item__name {
+    margin-right: 0.5rem;
+    margin-left: 1rem;
+  }
+
+  .semester-icon {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateX(4px);
+    }
+  }
+}
+
+.semester-item__classes-container,
+.semester-item__students-container {
+  text-align: center;
+}
+
+.semester-item__actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.semester-item__icon {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.edit-icon {
+  color: $primary-blue;
+}
+
+.delete-icon {
+  color: red;
+}

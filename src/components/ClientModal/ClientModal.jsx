@@ -30,9 +30,21 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
     additional_notes: "",
     status: "new lead",
     how_did_you_hear: "",
+    created_at: "",
   };
 
   const [form, setForm] = useState(initialFormState);
+
+  // Format date helper
+  const formatDate = (dateString) => {
+    if (!dateString) return "Unknown";
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    }).format(date); // Outputs: "Jan 23, 2025"
+  };
 
   const statusOptions = [
     { value: "new lead", label: "New Lead" },
@@ -61,6 +73,7 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
           additional_notes: client.additional_notes || "",
           status: client.status.toLowerCase() || "new lead",
           how_did_you_hear: client.how_did_you_hear || "",
+          created_at: client.created_at || "",
         });
       } else {
         setForm(initialFormState);
@@ -325,6 +338,18 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
                 style={{ padding: "0.25rem", fontSize: "0.85rem" }}
               />
             </Form.Group>
+
+            {/* Created At (Display Only) */}
+            {form.created_at && (
+              <Form.Group>
+                <Form.Label style={{ fontSize: "0.85rem", color: "#555" }}>
+                  Client created on:{" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    {formatDate(form.created_at)}
+                  </span>
+                </Form.Label>
+              </Form.Group>
+            )}
           </Form>
         </Modal.Body>
         <Modal.Footer>

@@ -89,8 +89,8 @@ function Header() {
             <li className="sidebar__item">
               <NavLink
                 icon={<GrPersonalComputer className="icon" />}
-                text={"Classes"}
-                to={"/classes"}
+                text={"Semesters"}
+                to={"/semesters"}
               />
             </li>
             <li className="sidebar__item">

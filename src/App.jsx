@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 // Import the pages
 import ClientsPage from "./pages/ClientsPage/ClientsPage.jsx";
 import CalendarPage from "./pages/CalendarPage/CalendarPage.jsx";
-import ClassesPage from "./pages/ClassesPage/ClassesPage.jsx";
+import SemestersPage from "./pages/SemestersPage/SemestersPage.jsx";
 import StudentsPage from "./pages/StudentsPage/StudentsPage.jsx";
 import TeachersPage from "./pages/TeachersPage/TeachersPage.jsx";
 import "./styles/partials/_globals.scss";
@@ -21,27 +21,27 @@ function App() {
   return (
     <>
       <ToastContainer theme="colored" />
-      {!accessToken ? (
+      {/* {!accessToken ? (
         <LoginPage onLoginSuccess={(token) => setAccessToken(token)} />
-      ) : (
-        <div className="app">
-          <BrowserRouter>
-            <Header />
-            <Routes>
-              {/* Main pages */}
-              <Route path="/" element={<Navigate to="/calendar" replace />} />
-              <Route
-                path="/calendar"
-                element={<CalendarPage accessToken={accessToken} />}
-              />
-              <Route path="/clients" element={<ClientsPage />} />
-              <Route path="/classes" element={<ClassesPage />} />
-              <Route path="/students" element={<StudentsPage />} />
-              <Route path="/teachers" element={<TeachersPage />} />
-            </Routes>
-          </BrowserRouter>
-        </div>
-      )}
+      ) : ( */}
+      <div className="app">
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            {/* Main pages */}
+            <Route path="/" element={<Navigate to="/calendar" replace />} />
+            <Route
+              path="/calendar"
+              element={<CalendarPage accessToken={accessToken} />}
+            />
+            <Route path="/clients" element={<ClientsPage />} />
+            <Route path="/semesters" element={<SemestersPage />} />
+            <Route path="/students" element={<StudentsPage />} />
+            <Route path="/teachers" element={<TeachersPage />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+      {/* )} */}
     </>
   );
 }
