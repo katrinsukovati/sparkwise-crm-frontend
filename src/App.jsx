@@ -7,6 +7,7 @@ import StudentsPage from "./pages/StudentsPage/StudentsPage.jsx";
 import TeachersPage from "./pages/TeachersPage/TeachersPage.jsx";
 import ClassesPage from "./pages/ClassesPage/ClassesPage.jsx";
 import AddClassPage from "./pages/AddClassPage/AddClassPage.jsx";
+import ClassDetailsPage from "./pages/ClassDetailsPage/ClassDetailsPage.jsx";
 import "./styles/partials/_globals.scss";
 
 import { useState } from "react";
@@ -47,6 +48,11 @@ function App() {
             <Route
               path="/semesters/:semesterId/classes/add"
               element={<AddClassPage />}
+            />
+
+            <Route
+              path="/semesters/:semesterId/classes/:classId"
+              element={<ClassDetailsPage />}
             />
           </Routes>
         </BrowserRouter>

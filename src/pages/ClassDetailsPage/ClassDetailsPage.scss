@@ -1,0 +1,69 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+.content.class-details-page {
+  display: flex;
+  flex-direction: column;
+
+  .actions-header {
+    // same approach as add/edit pages
+    padding: 1rem 0;
+
+    .title-with-arrow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .back-arrow {
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.15);
+        }
+      }
+
+      h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .class-details-container {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+    .class-info,
+    .students-info {
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+
+    .actions-footer {
+      display: flex;
+      justify-content: flex-end;
+
+      .edit-class-button {
+        background-color: #3f8cff;
+        color: #fff;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  }
+}
