@@ -5,6 +5,8 @@ import CalendarPage from "./pages/CalendarPage/CalendarPage.jsx";
 import SemestersPage from "./pages/SemestersPage/SemestersPage.jsx";
 import StudentsPage from "./pages/StudentsPage/StudentsPage.jsx";
 import TeachersPage from "./pages/TeachersPage/TeachersPage.jsx";
+import ClassesPage from "./pages/ClassesPage/ClassesPage.jsx";
+import AddClassPage from "./pages/AddClassPage/AddClassPage.jsx";
 import "./styles/partials/_globals.scss";
 
 import { useState } from "react";
@@ -38,6 +40,14 @@ function App() {
             <Route path="/semesters" element={<SemestersPage />} />
             <Route path="/students" element={<StudentsPage />} />
             <Route path="/teachers" element={<TeachersPage />} />
+            <Route
+              path="/semesters/:semesterId/classes"
+              element={<ClassesPage />}
+            />
+            <Route
+              path="/semesters/:semesterId/classes/add"
+              element={<AddClassPage />}
+            />
           </Routes>
         </BrowserRouter>
       </div>

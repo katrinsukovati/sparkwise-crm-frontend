@@ -1,0 +1,21 @@
+.breadcrumbs {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.breadcrumbs .current {
+  font-weight: bold;
+  color: #333;
+}

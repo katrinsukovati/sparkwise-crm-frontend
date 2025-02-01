@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SemesterList.scss";
 import SemesterModal from "../SemesterModal/SemesterModal";
-import DeleteSemesterModal from "../DeleteSemesterModal/DeleteSemesterModal";
+import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
 import { FaTrashAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import chevronIcon from "../../assets/icons/chevron_right-24px.svg";
@@ -15,6 +16,7 @@ function SemesterList({ semesters, refreshSemesters }) {
   const [selectedSemester, setSelectedSemester] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleEditClick = (semester, e) => {
     e.stopPropagation();
@@ -24,21 +26,20 @@ function SemesterList({ semesters, refreshSemesters }) {
 
   const handleDeleteClick = (semester, e) => {
     e.stopPropagation();
-    console.log("Delete clicked for semester:", semester); // Debug
+    console.log("Delete clicked for semester:", semester);
     setSelectedSemester(semester);
     setShowDeleteModal(true);
   };
 
   const handleDeleteConfirm = async () => {
     try {
-      console.log("Delete confirmed"); // Debug
+      console.log("Delete confirmed");
       if (!selectedSemester?.id) {
         console.error("Semester ID is missing.");
         return;
       }
 
-      console.log(`Deleting semester: ${selectedSemester.id}`); // Debug
-      console.log(`API endpoint: ${URL}/semesters/${selectedSemester.id}`); // Debug
+      console.log(`Deleting semester: ${selectedSemester.id}`);
       await axios.delete(`${URL}/semesters/${selectedSemester.id}`);
       toast.success("Semester deleted successfully!");
       refreshSemesters();
@@ -50,7 +51,7 @@ function SemesterList({ semesters, refreshSemesters }) {
   };
 
   const handleSemesterClick = (semester) => {
-    window.location.href = `/semesters/${semester.id}`;
+    navigate(`/semesters/${semester.id}/classes`);
   };
 
   return (
@@ -109,11 +110,12 @@ function SemesterList({ semesters, refreshSemesters }) {
             semester={selectedSemester}
             refreshSemesters={refreshSemesters}
           />
-          <DeleteSemesterModal
+          <DeleteConfirmationModal
             show={showDeleteModal}
             onHide={() => setShowDeleteModal(false)}
             onDelete={handleDeleteConfirm}
-            semesterName={selectedSemester?.name}
+            entityName={selectedSemester?.name}
+            entityType="semester"
           />
         </>
       )}

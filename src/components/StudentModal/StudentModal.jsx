@@ -84,54 +84,51 @@ const StudentModal = ({
   useEffect(() => {
     // get the selected students details
     const fetchStudentDetails = async () => {
-      if (show && mode === "edit" && student) {
-        try {
-          const studentResponse = await axios.get(
-            `${URL}/students/${student.student_id}`
-          );
+      if (!student || !student.student_id) {
+        console.warn("Student ID is missing, skipping API call.");
+        return;
+      }
 
-          // get all the classes that they are enrolled in
-          const enrollmentsResponse = await axios.get(
-            `${URL}/class-enrollments/student/${student.student_id}`
-          );
+      try {
+        // Fetch student details
+        const studentResponse = await axios.get(
+          `${URL}/students/${student.student_id}`
+        );
 
-          const enrollments = enrollmentsResponse.data.map((enrollment) => ({
-            value: enrollment.class_id,
-            label: `${enrollment.class_title} (${enrollment.semester_name})`,
-          }));
+        // Fetch class enrollments for the student
+        const enrollmentsResponse = await axios.get(
+          `${URL}/class-enrollments/student/${student.student_id}`
+        );
 
-          // set the form based on their current information
-          setForm({
-            first_name: studentResponse.data.first_name || "",
-            last_name: studentResponse.data.last_name || "",
-            email: studentResponse.data.email || "",
-            grade: studentResponse.data.grade || "",
-            date_of_birth:
-              studentResponse.data.date_of_birth?.split("T")[0] || "",
-            additional_notes: studentResponse.data.additional_notes || "",
-            enrollments,
-          });
+        // Convert enrollments into dropdown format
+        const enrollments = enrollmentsResponse.data.map((enrollment) => ({
+          value: enrollment.class_id,
+          label: `${enrollment.class_title} (${enrollment.semester_name})`,
+        }));
 
-          // set parent info based on their parent
-          setParentInfo({
-            parent_first_name: studentResponse.data.parent_first_name || "",
-            parent_last_name: studentResponse.data.parent_last_name || "",
-            parent_email: studentResponse.data.parent_email || "",
-            parent_phone: studentResponse.data.parent_phone || "",
-          });
-        } catch (error) {
-          toast.error("Error fetching student details.");
-          console.error("Error fetching student details:", error);
-        }
-        // if in edit mode, the initial form is empty
-      } else if (show && mode === "add") {
-        setForm(initialFormState);
-        setParentInfo({
-          parent_first_name: "",
-          parent_last_name: "",
-          parent_email: "",
-          parent_phone: "",
+        // Set student details
+        setForm({
+          first_name: studentResponse.data.first_name || "",
+          last_name: studentResponse.data.last_name || "",
+          email: studentResponse.data.email || "",
+          grade: studentResponse.data.grade || "",
+          date_of_birth:
+            studentResponse.data.date_of_birth?.split("T")[0] || "",
+          additional_notes: studentResponse.data.additional_notes || "",
+          enrollments,
         });
+
+        // Set parent information
+        setParentInfo({
+          parent_first_name: studentResponse.data.parent_first_name || "N/A",
+          parent_last_name: studentResponse.data.parent_last_name || "",
+          parent_email: studentResponse.data.parent_email || "N/A",
+          parent_phone: studentResponse.data.parent_phone || "N/A",
+        });
+      } catch (error) {
+        console.error("Error fetching student details:", error);
+        toast.error("Failed to load student details.");
+        setForm(initialFormState);
       }
     };
 

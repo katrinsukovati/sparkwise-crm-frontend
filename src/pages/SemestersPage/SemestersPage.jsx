@@ -7,7 +7,6 @@ import Search from "../../components/Search/Search";
 import SortBy from "../../components/SortBy/SortBy";
 import SemesterModal from "../../components/SemesterModal/SemesterModal";
 
-
 const URL = import.meta.env.VITE_BACKEND_URL;
 
 function SemestersPage() {

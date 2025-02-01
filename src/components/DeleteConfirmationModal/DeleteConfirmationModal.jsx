@@ -2,15 +2,21 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { IoIosWarning } from "react-icons/io";
-import "./DeleteSemesterModal.scss";
+import "./DeleteConfirmationModal.scss";
 
-function DeleteSemesterModal({ show, onHide, onDelete, semesterName }) {
+function DeleteConfirmationModal({
+  show,
+  onHide,
+  onDelete,
+  entityName,
+  entityType,
+}) {
   return (
     <Modal
       show={show}
       onHide={onHide}
       size="sm"
-      aria-labelledby="contained-modal-title-vcenter"
+      aria-labelledby="delete-modal"
       centered
     >
       <Modal.Body className="delete-modal">
@@ -19,8 +25,8 @@ function DeleteSemesterModal({ show, onHide, onDelete, semesterName }) {
         </div>
         <h4 className="delete-modal__title">Are you sure?</h4>
         <p className="delete-modal__message">
-          Do you really want to delete <strong>{semesterName}</strong>? This
-          process cannot be undone.
+          Do you really want to delete <strong>{entityName}</strong>{" "}
+          {entityType}? This action cannot be undone.
         </p>
         <div className="delete-modal__actions">
           <Button
@@ -43,4 +49,4 @@ function DeleteSemesterModal({ show, onHide, onDelete, semesterName }) {
   );
 }
 
-export default DeleteSemesterModal;
+export default DeleteConfirmationModal;

@@ -686,6 +686,9 @@ const EventModal = ({
               style={{ padding: "0.25rem", fontSize: "0.85rem" }}
             />
           </Form.Group>
+          
+
+          
           <Form.Group className="mb-3">
             <Form.Label>Zoom Link Options: </Form.Label>
             <div className="d-flex align-items-center">

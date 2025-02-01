@@ -1,0 +1,60 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 98.9vh;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  // padding-bottom: 0.5rem;
+  color: $primary-black;
+}
+
+.classes-list-container {
+  background-color: $white;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.actions {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem 0.5rem 2rem;
+
+  &__search-sort-container {
+    display: flex;
+    gap: 1.2rem;
+  }
+}
+
+.add-class-button {
+  background-color: $primary-blue;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  min-width: 8rem;
+  min-height: 2.5rem;
+  font-size: 0.85rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: $primary-dark-blue;
+    transform: scale(1.05);
+  }
+}
