@@ -26,8 +26,6 @@ function ClassDetailsPage() {
           `${URL}/class-enrollments/${classId}/students`
         );
         setEnrolledStudents(studentRes.data);
-        console.log(studentRes);
-
         setLoading(false);
       } catch (error) {
         console.error("Error fetching class details:", error);

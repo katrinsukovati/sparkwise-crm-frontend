@@ -13,6 +13,7 @@ function ClassesList({ classes, refreshClasses }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const navigate = useNavigate();
 
+  // Format schedule array into a string
   const formatSchedule = (schedule) => {
     if (!schedule || !Array.isArray(schedule) || schedule.length === 0) {
       return "No schedule provided";
@@ -22,12 +23,14 @@ function ClassesList({ classes, refreshClasses }) {
       .join(", ");
   };
 
+  // Click the trash icon
   const handleDeleteClick = (classData, e) => {
     e.stopPropagation();
     setSelectedClass(classData);
     setShowDeleteModal(true);
   };
 
+  // Confirm the deletion
   const handleConfirmDelete = async () => {
     if (!selectedClass) return;
 
@@ -40,7 +43,7 @@ function ClassesList({ classes, refreshClasses }) {
     }
   };
 
-  // If user clicks entire row, maybe it goes to a detail page (or does nothing).
+  // Click entire row => go to detail page
   const handleClassClick = (classData) => {
     navigate(`/semesters/${classData.semester_id}/classes/${classData.id}`);
   };
@@ -55,37 +58,39 @@ function ClassesList({ classes, refreshClasses }) {
               className="class__item"
               onClick={() => handleClassClick(c)}
             >
-              <div className="class-item">
-                <div className="class-item__name-container">
-                  <p className="class-item__name label">{c.class_title}</p>
-                  <img
-                    src={chevronIcon}
-                    alt="arrow icon"
-                    className="class-icon"
-                  />
-                </div>
-                <div className="class-item__teacher-container">
-                  <p className="class-item__teacher label">
-                    {c.teacher_first_name} {c.teacher_last_name}
-                  </p>
-                </div>
-                <div className="class-item__schedule-container">
-                  <p className="class-item__schedule label">
-                    {formatSchedule(c.schedule)}
-                  </p>
-                </div>
-                <div className="class-item__students-container">
-                  <p className="class-item__students label">
-                    {c.student_count || 0} Students
-                  </p>
-                </div>
-                <div className="class-item__actions">
-                  <FaTrashAlt
-                    className="class-item__icon delete-icon"
-                    size={18}
-                    onClick={(e) => handleDeleteClick(c, e)}
-                  />
-                </div>
+              {/* 
+                We have 5 columns in the grid (grid-template-columns: repeat(5, 1fr)).
+                Each of these divs is 1 column.
+              */}
+              <div className="class-item__name-container">
+                <p className="class-item__name label">{c.class_title}</p>
+                <img
+                  src={chevronIcon}
+                  alt="arrow icon"
+                  className="class-icon"
+                />
+              </div>
+              <div className="class-item__teacher-container">
+                <p className="class-item__teacher label">
+                  {c.teacher_first_name} {c.teacher_last_name}
+                </p>
+              </div>
+              <div className="class-item__schedule-container">
+                <p className="class-item__schedule label">
+                  {formatSchedule(c.schedule)}
+                </p>
+              </div>
+              <div className="class-item__students-container">
+                <p className="class-item__students label">
+                  {c.student_count || 0} Students
+                </p>
+              </div>
+              <div className="class-item__actions">
+                <FaTrashAlt
+                  className="class-item__icon delete-icon"
+                  size={18}
+                  onClick={(e) => handleDeleteClick(c, e)}
+                />
               </div>
             </li>
           ))
@@ -94,7 +99,7 @@ function ClassesList({ classes, refreshClasses }) {
         )}
       </ul>
 
-      {/* Reusable Delete Confirmation Modal */}
+      {/* Delete Confirmation Modal */}
       <DeleteConfirmationModal
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}

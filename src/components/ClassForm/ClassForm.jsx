@@ -124,8 +124,6 @@ function ClassForm({
       students: form.students.map((s) => s.value ?? s),
     };
 
-    console.log(payload);
-
     onSubmit(payload);
   };
 

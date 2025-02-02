@@ -11,15 +11,24 @@
   }
 }
 
-.label {
-  text-align: center;
+.no-classes {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: $primary-black;
+  opacity: 0.8;
 }
 
 .class__item {
-  display: flex;
+  // We use grid for each row
+  display: grid;
+  // 5 columns ( adjust if you want more/less ), each 1fr for equal widths
+  grid-template-columns: repeat(5, 1fr);
   align-items: center;
-  padding: 1.5rem 1rem;
-  font-size: 0.875rem;
+  gap: 1rem;
+
+  // Spacing & style
+  padding: 1.5rem 2rem;
+  font-size: 0.75rem;
   color: $primary-black;
   border-top: 1px solid #eeeeee;
   border-bottom: 1px solid #eeeeee;
@@ -29,53 +38,56 @@
   &:hover {
     background-color: $hover-client-bg;
   }
+
+  // If you prefer a bigger font or different spacing, adjust the above values
 }
 
+// .class-item is the inner container if you need it. But in this design,
+// each .class__item *is* the row. If you'd like a nested .class-item, you can keep it:
 .class-item {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  align-items: center;
-  width: 100%;
+  // Not strictly necessary, but if you want to nest your columns inside
+  // the .class-item, you could do:
+  // display: contents;
 }
 
+// Each "column" is forced to wrap text if too long
+.class-item__name-container,
+.class-item__teacher-container,
+.class-item__schedule-container,
+.class-item__students-container,
+.class-item__actions {
+  text-align: center;
+  // Allow text to wrap
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+// The arrow icon can shift on hover if you want
 .class-item__name-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: auto;
-  transition: transform 0.3s ease;
+
+  .class-item__name {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+  }
+
+  .class-icon {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+  }
 
   &:hover {
     .class-icon {
       transform: translateX(4px);
     }
   }
-
-  .class-item__name {
-    margin-right: 0.5rem;
-    margin-left: 1rem;
-    white-space: nowrap;
-  }
-
-  .class-icon {
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
-    transition: transform 0.3s ease;
-
-    &:hover {
-      transform: translateX(4px);
-    }
-  }
 }
 
-.class-item__schedule-container,
-.class-item__students-container {
-  text-align: center;
-}
-
+// The actions column (delete icon, etc.)
 .class-item__actions {
   display: flex;
   justify-content: center;
@@ -83,6 +95,7 @@
   gap: 1rem;
 }
 
+// Hover effect on icons
 .class-item__icon {
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -92,10 +105,7 @@
   }
 }
 
-.edit-icon {
-  color: $primary-blue;
-}
-
+// Adjust icon colors
 .delete-icon {
   color: red;
 }
