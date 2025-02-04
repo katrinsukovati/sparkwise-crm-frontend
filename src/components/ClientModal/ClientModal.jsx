@@ -34,6 +34,7 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
   };
 
   const [form, setForm] = useState(initialFormState);
+  const subjectsList = ["Math", "Science", "English", "Coding"];
 
   // Format date helper
   const formatDate = (dateString) => {
@@ -276,7 +277,7 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
             <Form.Group className="mb-2">
               <Form.Label>Subjects Interested In</Form.Label>
               <div>
-                {["English", "Coding", "Math", "Science"].map((subject) => (
+                {subjectsList.map((subject) => (
                   <Form.Check
                     inline
                     key={subject}

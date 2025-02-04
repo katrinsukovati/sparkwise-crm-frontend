@@ -1,0 +1,100 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/typography" as *;
+
+.teachers {
+  &__list {
+    list-style: none;
+    margin-top: 1rem;
+  }
+}
+
+.teacher-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1.5rem 2rem;
+  font-size: 0.75rem;
+  color: $primary-black;
+  border-top: 0.1px solid #eeeeee;
+  border-bottom: 0.1px solid #eeeeee;
+
+  div {
+    flex: 1;
+    text-align: center;
+  }
+
+  &:hover {
+    background-color: $hover-client-bg;
+  }
+
+  &__name-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+
+    .teacher-item__name {
+      margin-right: 0.5rem;
+      margin-left: 1rem;
+    }
+
+    .teacher-icon {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateX(4px);
+      }
+    }
+  }
+
+  .label {
+    flex: 1;
+    margin-bottom: 0;
+    text-align: center;
+
+    &.teacher-item__name-container {
+      flex: unset;
+    }
+  }
+}
+
+.teacher-item__name-container {
+  .teacher-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+
+  .teacher-icon {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover .teacher-icon {
+    transform: translateX(4px);
+  }
+}
+
+.teacher-item__name-container .label {
+  flex: unset;
+}
+
+.teacher-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+
+  .teachers__list {
+    padding: 0;
+    flex: 1;
+    overflow-y: auto;
+  }
+}
