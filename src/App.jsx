@@ -24,40 +24,40 @@ function App() {
   return (
     <>
       <ToastContainer theme="colored" />
-      {!accessToken ? (
+      {/* {!accessToken ? (
         <LoginPage onLoginSuccess={(token) => setAccessToken(token)} />
-      ) : (
-        <div className="app">
-          <BrowserRouter>
-            <Header />
-            <Routes>
-              {/* Main pages */}
-              <Route path="/" element={<Navigate to="/calendar" replace />} />
-              <Route
-                path="/calendar"
-                element={<CalendarPage accessToken={accessToken} />}
-              />
-              <Route path="/clients" element={<ClientsPage />} />
-              <Route path="/semesters" element={<SemestersPage />} />
-              <Route path="/students" element={<StudentsPage />} />
-              <Route path="/teachers" element={<TeachersPage />} />
-              <Route
-                path="/semesters/:semesterId/classes"
-                element={<ClassesPage />}
-              />
-              <Route
-                path="/semesters/:semesterId/classes/add"
-                element={<AddClassPage />}
-              />
+      ) : ( */}
+      <div className="app">
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            {/* Main pages */}
+            <Route path="/" element={<Navigate to="/calendar" replace />} />
+            <Route
+              path="/calendar"
+              element={<CalendarPage accessToken={accessToken} />}
+            />
+            <Route path="/clients" element={<ClientsPage />} />
+            <Route path="/semesters" element={<SemestersPage />} />
+            <Route path="/students" element={<StudentsPage />} />
+            <Route path="/teachers" element={<TeachersPage />} />
+            <Route
+              path="/semesters/:semesterId/classes"
+              element={<ClassesPage />}
+            />
+            <Route
+              path="/semesters/:semesterId/classes/add"
+              element={<AddClassPage />}
+            />
 
-              <Route
-                path="/semesters/:semesterId/classes/:classId"
-                element={<ClassDetailsPage />}
-              />
-            </Routes>
-          </BrowserRouter>
-        </div>
-      )}
+            <Route
+              path="/semesters/:semesterId/classes/:classId"
+              element={<ClassDetailsPage />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </div>
+      {/* )} */}
     </>
   );
 }

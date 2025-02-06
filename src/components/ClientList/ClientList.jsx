@@ -17,11 +17,14 @@ function ClientList({ clients, refreshClients }) {
     <div className="client-list">
       <ul className="clients__list">
         {clients.map((c) => (
-          <li key={c.id} className="client__item">
+          <li
+            key={c.id}
+            className="client__item"
+            onClick={() => handleClientClick(c)}
+          >
             <div className="client-item">
               <div
                 className="client-item__name-container"
-                onClick={() => handleClientClick(c)}
                 style={{ cursor: "pointer" }}
               >
                 <p className="client-item__name label">

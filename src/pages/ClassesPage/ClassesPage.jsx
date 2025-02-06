@@ -7,6 +7,7 @@ import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 import Search from "../../components/Search/Search";
 import SortBy from "../../components/SortBy/SortBy";
 import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { IoArrowBack } from "react-icons/io5";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -56,7 +57,15 @@ function ClassesPage() {
   return (
     <div className="content">
       <Breadcrumbs />
-      <div className="title">Classes ({classes.length})</div>
+      {/* Back Arrow to Navigate to Semester Page */}
+      <div className="back-navigation">
+        <IoArrowBack
+          className="back-arrow"
+          onClick={() => navigate(`/semesters`)}
+        />
+        <h2 className="class-title">Classes ({classes.length})</h2>
+      </div>
+
       <div className="classes-list-container">
         <div className="actions">
           <div className="actions__add">

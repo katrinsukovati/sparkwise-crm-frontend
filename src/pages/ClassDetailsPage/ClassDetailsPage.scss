@@ -3,67 +3,177 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/typography" as *;
 
-.content.class-details-page {
+.content {
   display: flex;
   flex-direction: column;
+  height: 98.9vh;
+}
 
-  .actions-header {
-    // same approach as add/edit pages
-    padding: 1rem 0;
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+}
 
-    .title-with-arrow {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+.student-list-container {
+  background-color: $white;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0.5rem;
+  overflow: hidden;
+}
 
-      .back-arrow {
-        font-size: 1.2rem;
-        cursor: pointer;
-        transition: transform 0.3s ease;
+.actions {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem 0.5rem 2rem;
 
-        &:hover {
-          transform: scale(1.15);
-        }
-      }
+  &__search-sort-container {
+    display: flex;
+    gap: 1.5rem;
+  }
+}
 
-      h2 {
-        font-size: 1.25rem;
-        font-weight: 600;
-      }
-    }
+.add-student-button {
+  background-color: $primary-blue;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  min-width: 8rem;
+  min-height: 2.5rem;
+  font-size: 0.8rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: $primary-dark-blue;
+    transform: scale(1.05);
+  }
+}
+
+// class info
+.class-info {
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: start;
+  padding-bottom: 1rem;
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
   }
 
-  .class-details-container {
-    background-color: #fff;
+  &__details-container {
+    display: flex;
+    gap: 2rem;
     padding: 1.5rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+  }
 
-    .class-info,
-    .students-info {
-      margin-bottom: 1.5rem;
+  &__details-section {
+    width: 33%; // ✅ Each section takes equal space
+
+    h4.class-info__section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #2b3a67;
     }
 
     p {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
 
-    .actions-footer {
-      display: flex;
-      justify-content: flex-end;
+    .class-info__schedule {
+      list-style: none;
+      padding: 0;
 
-      .edit-class-button {
-        background-color: #3f8cff;
-        color: #fff;
-        border: none;
-        padding: 0.6rem 1.2rem;
-        border-radius: 6px;
-        cursor: pointer;
+      li {
+        padding: 0.3rem 0;
+        border-bottom: 1px solid #e3e3e3;
 
-        &:hover {
-          background-color: #0056b3;
+        &:last-child {
+          border-bottom: none;
         }
       }
     }
+  }
+}
+
+.back-navigation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  .back-arrow {
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.15);
+    }
+  }
+
+  .class-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0;
+  }
+}
+
+// button
+.enrolled-students-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding-bottom: 1rem;
+}
+
+.enrolled-students-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: black;
+}
+
+.add-student-wrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  max-width: 600px; // ✅ Wider max-width
+}
+
+.add-student-dropdown {
+  flex-grow: 1; // ✅ Makes it expand fully within max-width
+  min-width: 250px;
+}
+
+.add-student-button {
+  background-color: $primary-blue;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: $primary-dark-blue;
+    transform: scale(1.05);
   }
 }

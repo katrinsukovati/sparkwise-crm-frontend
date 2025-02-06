@@ -15,21 +15,20 @@ function TeachersPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const filterRef = useRef(null); // For detecting outside clicks
 
-  // get all teachers
+  // Fetch teachers based on search query
   const fetchTeachers = async () => {
     try {
       const response = await axios.get(`${URL}/teachers`, {
-        params: {
-          search: searchQuery,
-        },
+        params: { search: searchQuery.trim() || undefined },
       });
       setTeachers(response.data);
     } catch (error) {
       console.error("Failed to fetch teachers:", error);
+      setTeachers([]);
     }
   };
 
-  // get teachers when filters, search, or sorting changes
+  // Fetch teachers when search query changes
   useEffect(() => {
     fetchTeachers();
   }, [searchQuery]);
@@ -38,19 +37,6 @@ function TeachersPage() {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
-
-  // Close filter dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setShowFilterDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <div className="content">

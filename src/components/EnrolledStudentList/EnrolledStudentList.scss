@@ -3,18 +3,16 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/typography" as *;
 
-.clients {
+.students {
   &__list {
     list-style: none;
     margin-top: 1rem;
-    padding: 0;
   }
 }
 
-.client-item {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  gap: 1rem;
+.student-item {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 1.5rem 2rem;
@@ -22,12 +20,10 @@
   color: $primary-black;
   border-top: 0.1px solid #eeeeee;
   border-bottom: 0.1px solid #eeeeee;
-  cursor: pointer;
 
   div {
+    flex: 1;
     text-align: center;
-    overflow: hidden;
-    word-wrap: break-word;
   }
 
   &:hover {
@@ -42,20 +38,16 @@
     flex-shrink: 0;
     flex-basis: auto;
 
-    .client-item__name {
+    .student-item__name {
       margin-right: 0.5rem;
       margin-left: 1rem;
     }
 
-    .client-icon {
+    .student-icon {
       flex-shrink: 0;
       width: 16px;
       height: 16px;
       transition: transform 0.3s ease;
-
-      &:hover {
-        transform: translateX(4px);
-      }
     }
   }
 
@@ -64,46 +56,50 @@
     margin-bottom: 0;
     text-align: center;
 
-    &.client-item__name-container {
+    &.student-item__name-container {
       flex: unset;
     }
   }
 }
 
-.client-item__name-container {
-  .client-icon {
+.student-item__name-container {
+  .student-icon {
     flex-shrink: 0;
     width: 16px;
     height: 16px;
   }
 
-  .client-icon {
+  .student-icon {
     transition: transform 0.3s ease;
-  }
-
-  &:hover .client-icon {
-    transform: translateX(4px);
   }
 }
 
-.client-item__name-container .label {
+.student-item__name-container .label {
   flex: unset;
 }
 
-.client-list {
+.student-list {
   display: flex;
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  margin-top: 0;
 
-  .clients__list {
+  .students__list {
     padding: 0;
     flex: 1;
     overflow-y: auto;
+    margin-top: 0;
   }
+}
 
-  .pagination-footer {
-    flex-shrink: 0;
-    padding: 1rem 2rem;
+.remove-icon {
+  color: red;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  font-size: 1rem;
+
+  &:hover {
+    transform: scale(1.1);
   }
 }

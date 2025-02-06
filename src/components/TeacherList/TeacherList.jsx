@@ -4,28 +4,12 @@ import "./TeacherList.scss";
 import chevronIcon from "../../assets/icons/chevron_right-24px.svg";
 import TeacherModal from "../TeacherModal/TeacherModal";
 
-const URL = import.meta.env.VITE_BACKEND_URL;
+const gradeOrder = ["Grades 1-3", "Grades 4-6", "Grades 7-8"];
 
-function TeacherList({ refreshTeachers }) {
-  const [teachers, setTeachers] = useState([]);
+function TeacherList({ teachers, refreshTeachers }) {
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [error, setError] = useState("");
-
-  // Fetch teachers on mount
-  useEffect(() => {
-    const fetchTeachers = async () => {
-      try {
-        const response = await axios.get(`${URL}/teachers`);
-        setTeachers(response.data);
-      } catch (error) {
-        console.error("Error fetching teachers:", error);
-        setError("Failed to load teachers.");
-      }
-    };
-
-    fetchTeachers();
-  }, [refreshTeachers]);
 
   const handleTeacherClick = (teacher) => {
     setSelectedTeacher(teacher);
@@ -36,44 +20,53 @@ function TeacherList({ refreshTeachers }) {
     <div className="teacher-list">
       {error && <p className="error-message">{error}</p>}
       <ul className="teachers__list">
-        {teachers.map((teacher) => (
-          <li key={teacher.id} className="teacher__item">
-            <div
-              className="teacher-item"
-              onClick={() => handleTeacherClick(teacher)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="teacher-item__name-container">
-                <p className="teacher-item__name label">
-                  {teacher.first_name} {teacher.last_name}
-                </p>
-                <img
-                  src={chevronIcon}
-                  alt="arrow icon"
-                  className="teacher-icon"
-                />
+        {teachers.length > 0 ? (
+          teachers.map((teacher) => (
+            <li key={teacher.id} className="teacher__item">
+              <div
+                className="teacher-item"
+                onClick={() => handleTeacherClick(teacher)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="teacher-item__name-container">
+                  <p className="teacher-item__name label">
+                    {teacher.first_name} {teacher.last_name}
+                  </p>
+                  <img
+                    src={chevronIcon}
+                    alt="arrow icon"
+                    className="teacher-icon"
+                  />
+                </div>
+                <div className="teacher-item__email-container">
+                  <p className="teacher-item__email label">{teacher.email}</p>
+                </div>
+                <div className="teacher-item__phone-container">
+                  <p className="teacher-item__phone label">
+                    {teacher.phone_number}
+                  </p>
+                </div>
+                <div className="teacher-item__subjects-container">
+                  <p className="teacher-item__subjects label">
+                    {teacher.subjects?.join(", ")}
+                  </p>
+                </div>
+                <div className="teacher-item__grades-container">
+                  <p className="teacher-item__grades label">
+                    {teacher.grades
+                      ?.slice()
+                      .sort(
+                        (a, b) => gradeOrder.indexOf(a) - gradeOrder.indexOf(b)
+                      )
+                      .join(", ")}
+                  </p>
+                </div>
               </div>
-              <div className="teacher-item__email-container">
-                <p className="teacher-item__email label">{teacher.email}</p>
-              </div>
-              <div className="teacher-item__phone-container">
-                <p className="teacher-item__phone label">
-                  {teacher.phone_number}
-                </p>
-              </div>
-              <div className="teacher-item__subjects-container">
-                <p className="teacher-item__subjects label">
-                  {teacher.subjects?.join(", ")}
-                </p>
-              </div>
-              <div className="teacher-item__grades-container">
-                <p className="teacher-item__grades label">
-                  {teacher.grades?.join(", ")}
-                </p>
-              </div>
-            </div>
-          </li>
-        ))}
+            </li>
+          ))
+        ) : (
+          <p className="no-results">No teachers found.</p>
+        )}
       </ul>
 
       {selectedTeacher && (

@@ -5,6 +5,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import chevronIcon from "../../assets/icons/chevron_right-24px.svg";
 import axios from "axios";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
+import { toast } from "react-toastify";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -38,6 +39,9 @@ function ClassesList({ classes, refreshClasses }) {
       await axios.delete(`${URL}/classes/${selectedClass.id}`);
       refreshClasses();
       setShowDeleteModal(false);
+      toast.success(
+        `${selectedClass.class_title} has been removed from this semester.`
+      );
     } catch (error) {
       console.error("Failed to delete class:", error);
     }
@@ -58,39 +62,37 @@ function ClassesList({ classes, refreshClasses }) {
               className="class__item"
               onClick={() => handleClassClick(c)}
             >
-              {/* 
-                We have 5 columns in the grid (grid-template-columns: repeat(5, 1fr)).
-                Each of these divs is 1 column.
-              */}
-              <div className="class-item__name-container">
-                <p className="class-item__name label">{c.class_title}</p>
-                <img
-                  src={chevronIcon}
-                  alt="arrow icon"
-                  className="class-icon"
-                />
-              </div>
-              <div className="class-item__teacher-container">
-                <p className="class-item__teacher label">
-                  {c.teacher_first_name} {c.teacher_last_name}
-                </p>
-              </div>
-              <div className="class-item__schedule-container">
-                <p className="class-item__schedule label">
-                  {formatSchedule(c.schedule)}
-                </p>
-              </div>
-              <div className="class-item__students-container">
-                <p className="class-item__students label">
-                  {c.student_count || 0} Students
-                </p>
-              </div>
-              <div className="class-item__actions">
-                <FaTrashAlt
-                  className="class-item__icon delete-icon"
-                  size={18}
-                  onClick={(e) => handleDeleteClick(c, e)}
-                />
+              <div className="class-item">
+                <div className="class-item__name-container">
+                  <p className="class-item__name label">{c.class_title}</p>
+                  <img
+                    src={chevronIcon}
+                    alt="arrow icon"
+                    className="class-icon"
+                  />
+                </div>
+                <div className="class-item__teacher-container">
+                  <p className="class-item__teacher label">
+                    {c.teacher_first_name} {c.teacher_last_name}
+                  </p>
+                </div>
+                <div className="class-item__schedule-container">
+                  <p className="class-item__schedule label">
+                    {formatSchedule(c.schedule)}
+                  </p>
+                </div>
+                <div className="class-item__students-container">
+                  <p className="class-item__students label">
+                    {c.student_count || 0} Students
+                  </p>
+                </div>
+                <div className="class-item__actions">
+                  <FaTrashAlt
+                    className="class-item__icon delete-icon"
+                    size={18}
+                    onClick={(e) => handleDeleteClick(c, e)}
+                  />
+                </div>
               </div>
             </li>
           ))

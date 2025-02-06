@@ -124,9 +124,6 @@ function ClientsPage() {
                 </div>
               )}
             </div>
-            <div className="actions__search">
-              <Search handleSearchChange={handleSearchChange} />
-            </div>
             <div className="actions__sort">
               <SortBy
                 options={[
@@ -135,6 +132,9 @@ function ClientsPage() {
                 ]}
                 onChange={setSortOption}
               />
+            </div>
+            <div className="actions__search">
+              <Search handleSearchChange={handleSearchChange} />
             </div>
           </div>
         </div>
