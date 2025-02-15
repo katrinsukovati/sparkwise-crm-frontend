@@ -11,6 +11,8 @@ import ListHeader from "../../components/ListHeader/ListHeader";
 import List from "../../components/List/List";
 import { FaTrashAlt } from "react-icons/fa";
 import DeleteConfirmationModal from "../../components/DeleteConfirmationModal/DeleteConfirmationModal";
+import TextButton from "../../components/TextButton/TextButton";
+import { MdEdit } from "react-icons/md";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -155,12 +157,24 @@ function ClassDetailsPage() {
     <div className="content">
       <Breadcrumbs />
       {/* Back Arrow to Navigate to Semester Page */}
-      <div className="back-navigation">
-        <IoArrowBack
-          className="back-arrow"
-          onClick={() => navigate(`/semesters/${semesterId}/classes`)}
+      <div className="title">
+        <div className="title-back">
+          <IoArrowBack
+            className="back-arrow"
+            onClick={() => navigate(`/semesters/${semesterId}/classes`)}
+          />
+          <h2 className="class-title">{classData.class_title}</h2>
+        </div>
+        <TextButton
+          text={
+            <>
+              <MdEdit size={14} /> Edit Class
+            </>
+          }
+          handleClick={() =>
+            navigate(`/semesters/${semesterId}/classes/${classId}/edit`)
+          }
         />
-        <h2 className="class-title">{classData.class_title}</h2>
       </div>
 
       <div className="classes-list-container">

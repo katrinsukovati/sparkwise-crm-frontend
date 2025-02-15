@@ -1,5 +1,4 @@
 // src/pages/AddClassPage/AddClassPage.jsx
-
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -12,15 +11,17 @@ import ClassForm from "../../components/ClassForm/ClassForm";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
 function AddClassPage() {
-  const { semesterId } = useParams();
+  const { semesterId, classId } = useParams();
+  const mode = classId ? "edit" : "create";
   const navigate = useNavigate();
 
   const [classTypeOptions, setClassTypeOptions] = useState([]);
   const [teacherOptions, setTeacherOptions] = useState([]);
   const [studentOptions, setStudentOptions] = useState([]);
+  const [initialData, setInitialData] = useState(null);
 
   useEffect(() => {
-    const fetchOptions = async () => {
+    const fetchOptionsAndClass = async () => {
       try {
         const [ctRes, teacherRes, allStudentsRes] = await Promise.all([
           axios.get(`${URL}/class-types`),
@@ -34,61 +35,131 @@ function AddClassPage() {
             label: `${ct.title} (${ct.subject}, Grades ${ct.grades})`,
           }))
         );
+
         setTeacherOptions(
           teacherRes.data.map((t) => ({
             value: t.id,
             label: `${t.first_name} ${t.last_name}`,
           }))
         );
+
         setStudentOptions(
           allStudentsRes.data.map((s) => ({
             value: s.student_id,
             label: `${s.first_name} ${s.last_name}`,
           }))
         );
+
+        if (mode === "edit") {
+          const [classRes, studentsRes] = await Promise.all([
+            axios.get(`${URL}/classes/${classId}`),
+            axios.get(`${URL}/class-enrollments/${classId}/students`),
+          ]);
+
+          if (classRes.data) {
+            setInitialData({
+              ...classRes.data,
+              students: studentsRes.data.map((s) => ({
+                value: s.id,
+                label: `${s.first_name} ${s.last_name}`,
+              })),
+            });
+          }
+        }
       } catch (error) {
+        console.error("Error fetching form options:", error);
         toast.error("Failed to load form options.");
       }
     };
-    fetchOptions();
-  }, []);
 
-  const handleCreateClass = async (payload) => {
+    fetchOptionsAndClass();
+  }, [mode, classId]);
+
+  const handleSaveClass = async (payload) => {
     try {
-      // attach semester_id
       payload.semester_id = semesterId;
 
-      // create the class
-      const res = await axios.post(`${URL}/classes`, payload);
-      const newClass = res.data;
+      if (mode === "edit") {
+        // Fetch the current enrolled students from the database
+        const { data: currentEnrolledStudents } = await axios.get(
+          `${URL}/class-enrollments/${classId}/students`
+        );
 
-      if (!newClass?.id) {
-        toast.error("No class ID returned; cannot enroll students.");
-        return;
-      }
+        // Extract student IDs from the payload
+        const currentStudentIds = currentEnrolledStudents.map((s) => s.id);
+        const newStudentIds = payload.students.map((s) => s.value ?? s);
 
-      toast.success("Class created successfully!");
+        // Find students to add
+        const studentsToAdd = newStudentIds.filter(
+          (id) => !currentStudentIds.includes(id)
+        );
 
-      // enroll students if any
-      if (payload.students?.length > 0) {
-        for (const studentId of payload.students) {
-          await axios.post(`${URL}/class-enrollments`, {
-            class_id: newClass.id,
-            student_id: studentId,
-          });
+        // Find students to remove & get their enrollment IDs
+        const studentsToRemove = currentEnrolledStudents.filter(
+          (s) => !newStudentIds.includes(s.id)
+        );
+
+        // Update the class itself
+        await axios.put(`${URL}/classes/${classId}`, payload);
+        toast.success("Class updated successfully!");
+
+        // Add new students
+        await Promise.all(
+          studentsToAdd.map((studentId) =>
+            axios.post(`${URL}/class-enrollments`, {
+              class_id: classId,
+              student_id: studentId,
+            })
+          )
+        );
+
+        // Remove students (now using enrollment_id)
+        await Promise.all(
+          studentsToRemove.map((student) =>
+            axios.delete(`${URL}/class-enrollments/${student.enrollment_id}`)
+          )
+        );
+
+        toast.success("Student list updated!");
+        navigate(`/semesters/${semesterId}/classes/${classId}`);
+      } else {
+        // Create a new class
+        const res = await axios.post(`${URL}/classes`, payload);
+        const newClass = res.data;
+
+        if (!newClass?.id) {
+          toast.error("No class ID returned; cannot enroll students.");
+          return;
         }
-        toast.success("Students enrolled!");
-      }
 
-      navigate(`/semesters/${semesterId}/classes`);
+        toast.success("Class created successfully!");
+        payload.students = payload.students || [];
+
+        // Enroll students
+        await Promise.all(
+          payload.students.map((studentId) =>
+            axios.post(`${URL}/class-enrollments`, {
+              class_id: newClass.id,
+              student_id: studentId,
+            })
+          )
+        );
+
+        toast.success("Students enrolled!");
+        navigate(`/semesters/${semesterId}/classes/${newClass.id}`);
+      }
     } catch (err) {
-      console.error("Error creating class:", err);
+      console.error("Error saving class:", err);
       toast.error("Failed to save class.");
     }
   };
 
   const handleCancel = () => {
-    navigate(`/semesters/${semesterId}/classes`);
+    if (mode === "edit") {
+      navigate(`/semesters/${semesterId}/classes/${classId}`);
+    } else {
+      navigate(`/semesters/${semesterId}/classes`);
+    }
   };
 
   return (
@@ -97,21 +168,29 @@ function AddClassPage() {
         <div className="title-with-arrow">
           <IoArrowBack
             className="back-arrow"
-            onClick={() => navigate(`/semesters/${semesterId}/classes`)}
+            onClick={() => handleCancel()} // ✅ Uses correct navigation logic
           />
-          <div className="new-class-title">Add New Class</div>
+
+          <div className="new-class-title">
+            {mode === "edit" ? "Edit Class" : "Add New Class"}
+          </div>
         </div>
       </div>
 
       <div className="add-class-container">
-        <ClassForm
-          mode="create"
-          onSubmit={handleCreateClass}
-          onCancel={handleCancel}
-          classTypeOptions={classTypeOptions}
-          teacherOptions={teacherOptions}
-          studentOptions={studentOptions}
-        />
+        {mode === "edit" && !initialData ? (
+          <div>Loading class data...</div>
+        ) : (
+          <ClassForm
+            mode={mode}
+            initialData={initialData || {}}
+            onSubmit={handleSaveClass}
+            onCancel={handleCancel}
+            classTypeOptions={classTypeOptions}
+            teacherOptions={teacherOptions}
+            studentOptions={studentOptions}
+          />
+        )}
       </div>
     </div>
   );

@@ -10,14 +10,18 @@
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
-  min-width: 6rem;
-  width: 100%;
   font-size: 0.8rem;
   transition: transform 0.3s ease, background-color 0.3s ease;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  min-width: fit-content;
+
   @include tablet {
     font-size: 1rem;
-    width: 6.5rem;
+    min-width: fit-content;
   }
 
   &:hover {

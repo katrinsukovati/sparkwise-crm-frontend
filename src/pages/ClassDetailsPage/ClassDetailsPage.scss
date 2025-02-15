@@ -107,11 +107,16 @@
   }
 }
 
-.back-navigation {
+.title {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  justify-content: space-between;
+
+  &-back {
+    display: flex;
+  }
 
   .back-arrow {
     font-size: 1.4rem;

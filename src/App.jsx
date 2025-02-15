@@ -51,6 +51,10 @@ function App() {
               path="/semesters/:semesterId/classes/add"
               element={<AddClassPage />}
             />
+            <Route
+              path="/semesters/:semesterId/classes/:classId/edit"
+              element={<AddClassPage />}
+            />
 
             <Route
               path="/semesters/:semesterId/classes/:classId"

@@ -37,30 +37,48 @@ function ClassForm({
     students: [],
   });
 
+  console.log(initialData);
+
   // Which days are selected?
   const [selectedDays, setSelectedDays] = useState([]);
 
-  // If you want to do an auto-calc "last date," you can do that,
-  // but let's keep it simple: no end date.
   useEffect(() => {
-    if (mode === "edit" && initialData) {
+    if (mode === "edit" && initialData && Object.keys(initialData).length > 0) {
       setForm((prev) => ({
         ...prev,
         class_type_id: initialData.class_type_id || "",
         teacher_id: initialData.teacher_id || "",
         schedule: initialData.schedule || [],
-        start_date: initialData.start_date || "",
+        start_date: initialData.start_date
+          ? initialData.start_date.split("T")[0]
+          : "",
         occurrences: initialData.occurrences || "",
         zoomLink: initialData.zoom_link || "",
         googleClassroomCode: initialData.google_classroom_code || "",
         internalNotes: initialData.internal_notes || "",
         zoomOption: initialData.zoom_link ? "provide" : "none",
-        students: initialData.students || [],
+        students: Array.isArray(initialData.students)
+          ? initialData.students.map((s) => ({
+              value: s.value ?? s.id,
+              label: s.label || `${s.first_name} ${s.last_name}`,
+            }))
+          : [],
       }));
 
       if (Array.isArray(initialData.schedule)) {
-        const dayNames = initialData.schedule.map((slot) => slot.day);
-        setSelectedDays(dayNames);
+        setSelectedDays(initialData.schedule.map((slot) => slot.day));
+
+        // Set start and end times correctly
+        const scheduleObj = {};
+        initialData.schedule.forEach((slot) => {
+          scheduleObj[`start_time_${slot.day}`] = slot.start_time || "";
+          scheduleObj[`end_time_${slot.day}`] = slot.end_time || "";
+        });
+
+        setForm((prev) => ({
+          ...prev,
+          ...scheduleObj,
+        }));
       }
     }
   }, [mode, initialData]);
