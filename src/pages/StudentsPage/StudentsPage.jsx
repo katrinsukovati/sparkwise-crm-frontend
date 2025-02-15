@@ -1,20 +1,31 @@
 import "../StudentsPage/StudentsPage.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import StudentListHeader from "../../components/StudentListHeader/StudentListHeader";
 import Search from "../../components/Search/Search";
 import SortBy from "../../components/SortBy/SortBy";
-import StudentList from "../../components/StudentList/StudentList";
 import StudentModal from "../../components/StudentModal/StudentModal";
+import ListHeader from "../../components/ListHeader/ListHeader";
+import List from "../../components/List/List";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
+const studentFields = [
+  { key: "name", label: "Student Name" },
+  { key: "grade", label: "Grade" },
+  { key: "email", label: "Student Email" },
+  { key: "parent_name", label: "Parent Name" },
+  { key: "parent_phone", label: "Parent Phone" },
+  { key: "parent_email", label: "Parent Email" },
+];
+
 function StudentsPage() {
-  // states for search, sort, and students
+  // states for search, sort, students, and modal
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("newest");
   const [students, setStudents] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   // get all students
   const fetchStudents = async () => {
@@ -26,10 +37,11 @@ function StudentsPage() {
         },
       });
 
-      // make sure all students have necessary fields
-      const validStudents = response.data.filter(
-        (student) => student && student.first_name && student.last_name
-      );
+      const validStudents = response.data.map((student) => ({
+        ...student,
+        name: `${student.first_name} ${student.last_name}`,
+        parent_name: `${student.parent_first_name} ${student.parent_last_name}`,
+      }));
 
       setStudents(validStudents);
     } catch (error) {
@@ -45,6 +57,11 @@ function StudentsPage() {
   // this handles search input
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleStudentClick = (student) => {
+    setSelectedStudent(student);
+    setShowEditModal(true);
   };
 
   return (
@@ -75,8 +92,14 @@ function StudentsPage() {
             </div>
           </div>
         </div>
-        <StudentListHeader />
-        <StudentList students={students} refreshStudents={fetchStudents} />
+        <ListHeader headers={studentFields} />
+        <List
+          items={students}
+          fields={studentFields}
+          ModalComponent={StudentModal}
+          refreshData={fetchStudents}
+          onItemClick={handleStudentClick}
+        />
       </div>
       <StudentModal
         show={showAddModal} // show or hide the modal
@@ -84,6 +107,17 @@ function StudentsPage() {
         mode="add" // specify the mode - either add or edit
         refreshStudents={fetchStudents} // pass fetchStudents to refresh list on save/edit
       />
+
+      {/*Edit Student Modal */}
+      {selectedStudent && (
+        <StudentModal
+          show={showEditModal}
+          handleClose={() => setShowEditModal(false)}
+          mode="edit"
+          student={selectedStudent}
+          refreshStudents={fetchStudents}
+        />
+      )}
     </div>
   );
 }

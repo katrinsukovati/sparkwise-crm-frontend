@@ -1,0 +1,86 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/globals" as *;
+@use "../../styles/partials/variables" as *;
+
+// The entire container for the list of items
+.list-container {
+  display: flex;
+  overflow: hidden;
+
+  &__items {
+    padding: 0;
+    width: 100%;
+    overflow-y: auto;
+    list-style: none;
+  }
+}
+
+// Single item (each row)
+.single-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 1.5rem 2rem;
+  color: $primary-black;
+  border-top: 0.1px solid $light-gray;
+  border-bottom: 0.1px solid $light-gray;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.6rem;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0.5rem;
+    word-break: break-word;
+
+    &__label {
+      width: 100%;
+      text-align: center;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+      display: block;
+    }
+  }
+
+  &:hover {
+    background-color: $hover-client-bg;
+
+    .icon {
+      transform: translateX(4px);
+    }
+  }
+
+  @include desktop {
+    font-size: 0.75rem;
+  }
+}
+
+// Arrow Icon
+.icon {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.3s ease;
+  text-align: center;
+}
+
+// Icons on semester page
+.semester-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+// Delete icon
+.delete-icon {
+  color: red;
+}
+
+.edit-icon {
+  color: gray;
+}

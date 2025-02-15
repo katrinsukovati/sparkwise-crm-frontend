@@ -1,95 +1,70 @@
 import "../ClientsPage/ClientsPage.scss";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import ClientListHeader from "../../components/ClientListHeader/ClientListHeader";
 import Search from "../../components/Search/Search";
 import SortBy from "../../components/SortBy/SortBy";
-import ClientList from "../../components/ClientList/ClientList";
 import ClientModal from "../../components/ClientModal/ClientModal";
+import ListHeader from "../../components/ListHeader/ListHeader";
+import List from "../../components/List/List";
+import StatusLabel from "../../components/StatusLabel/StatusLabel";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
-const statusOptions = [
-  "invoice sent",
-  "trial completed",
-  "trial scheduled",
-  "new lead",
-  "enrolled",
-  "can't reach",
-  "not a fit",
-  "no show",
-  "registration form filled",
+const clientHeaders = [
+  { key: "parent_name", label: "Parent Name" },
+  { key: "parent_phone", label: "Parent Phone" },
+  { key: "parent_email", label: "Parent Email" },
+  { key: "child_first_name", label: "Child Name" },
+  { key: "child_grade", label: "Child Grade" },
+  { key: "subjects_interested", label: "Subjects" },
+  { key: "status", label: "Status" },
 ];
 
 function ClientsPage() {
-  // states for search, sort, clients, and filtering
+  // States
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("newest");
   const [clients, setClients] = useState([]);
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedStatuses, setSelectedStatuses] = useState([]); // Default: nothing checked
-  const [showFilterDropdown, setShowFilterDropdown] = useState(false); // Toggle dropdown
-  const filterRef = useRef(null); // For detecting outside clicks
 
-  // get all clients
+  // Fetch clients
   const fetchClients = async () => {
     try {
       const response = await axios.get(`${URL}/clients`, {
         params: {
           search: searchQuery,
           sortBy: sortOption,
-          status:
-            selectedStatuses.length > 0 ? selectedStatuses.join(",") : null, // Apply filter only if selected
         },
       });
-      setClients(response.data);
+
+      const transformedClients = response.data.map((client) => ({
+        ...client,
+        parent_name: `${client.parent_first_name} ${client.parent_last_name}`,
+      }));
+
+      console.log(transformedClients);
+
+      setClients(transformedClients);
     } catch (error) {
       console.error("Failed to fetch clients:", error);
     }
   };
 
-  // get clients when filters, search, or sorting changes
   useEffect(() => {
     fetchClients();
-  }, [searchQuery, sortOption, selectedStatuses]);
+  }, [searchQuery, sortOption]);
 
-  // Handle search input
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+  const handleClientClick = (client) => {
+    setSelectedClient(client);
+    setShowEditModal(true);
   };
-
-  // Handle selecting/unselecting a status
-  const handleStatusChange = (status) => {
-    if (selectedStatuses.includes(status)) {
-      setSelectedStatuses(selectedStatuses.filter((s) => s !== status));
-    } else {
-      setSelectedStatuses([...selectedStatuses, status]);
-    }
-  };
-
-  // Remove a selected status filter (by clicking anywhere on the tag)
-  const removeStatusFilter = (status) => {
-    setSelectedStatuses(selectedStatuses.filter((s) => s !== status));
-  };
-
-  // Close filter dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setShowFilterDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <div className="content">
       <div className="title">Clients ({clients.length})</div>
 
-      {/* Search, Sort, and Filter Section */}
       <div className="client-list-container">
         <div className="actions">
           <div className="actions__add">
@@ -101,28 +76,10 @@ function ClientsPage() {
             </button>
           </div>
           <div className="actions__search-sort-container">
-            {/* Filter by Status Button */}
-            <div className="actions__filter" ref={filterRef}>
-              <button
-                className="filter-button"
-                onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-              >
-                Filter by Status ▾
-              </button>
-              {showFilterDropdown && (
-                <div className="filter-dropdown">
-                  {statusOptions.map((status) => (
-                    <label key={status}>
-                      <input
-                        type="checkbox"
-                        checked={selectedStatuses.includes(status)}
-                        onChange={() => handleStatusChange(status)}
-                      />
-                      {status}
-                    </label>
-                  ))}
-                </div>
-              )}
+            <div className="actions__search">
+              <Search
+                handleSearchChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
             <div className="actions__sort">
               <SortBy
@@ -133,29 +90,30 @@ function ClientsPage() {
                 onChange={setSortOption}
               />
             </div>
-            <div className="actions__search">
-              <Search handleSearchChange={handleSearchChange} />
-            </div>
           </div>
         </div>
 
-        {/* Display Active Filters */}
-        {selectedStatuses.length > 0 && (
-          <div className="selected-filters">
-            {selectedStatuses.map((status) => (
-              <div
-                className="filter-tag"
-                key={status}
-                onClick={() => removeStatusFilter(status)}
-              >
-                {status} <span className="remove-tag">x</span>
+        {/* List headers */}
+        <ListHeader headers={clientHeaders} />
+        {/* List of clients */}
+        <List
+          items={clients}
+          fields={clientHeaders}
+          ModalComponent={ClientModal}
+          refreshData={fetchClients}
+          onItemClick={handleClientClick}
+          renderCustomField={(field, client) =>
+            field.key === "status" ? (
+              <div className="client-item__status-container">
+                <div className="client-item__status label">
+                  <StatusLabel text={client.status} />
+                </div>
               </div>
-            ))}
-          </div>
-        )}
-
-        <ClientListHeader />
-        <ClientList clients={clients} refreshClients={fetchClients} />
+            ) : (
+              client[field.key]
+            )
+          }
+        />
       </div>
 
       {/* Add Client Modal */}
@@ -165,6 +123,17 @@ function ClientsPage() {
         mode="add"
         refreshClients={fetchClients}
       />
+
+      {/* Edit Client Modal */}
+      {selectedClient && (
+        <ClientModal
+          show={showEditModal}
+          handleClose={() => setShowEditModal(false)}
+          mode="edit"
+          client={selectedClient}
+          refreshClients={fetchClients}
+        />
+      )}
     </div>
   );
 }

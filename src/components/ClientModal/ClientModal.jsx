@@ -105,9 +105,13 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
 
   const handleSave = async () => {
     try {
-      const payload = {
+      const { created_at, ...payload } = {
         ...form,
         subjects_interested: form.subjects_interested.join(", "),
+        city: form.city || "",
+        postal_code: form.postal_code || "",
+        how_did_you_hear: form.how_did_you_hear || "",
+        additional_notes: form.additional_notes || "",
       };
 
       if (mode === "add") {
@@ -119,11 +123,15 @@ const ClientModal = ({ show, handleClose, client, mode, refreshClients }) => {
       } else {
         toast.error("Invalid mode or missing client ID");
       }
+
       refreshClients();
       handleClose();
     } catch (error) {
-      toast.error("An error occurred. Please try again.");
-      console.error("Error saving client:", error);
+      console.error(
+        "Error saving client:",
+        error.response?.data || error.message
+      );
+      toast.error("An error occurred. Check console logs.");
     }
   };
 

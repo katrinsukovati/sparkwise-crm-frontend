@@ -8,6 +8,8 @@ import TeachersPage from "./pages/TeachersPage/TeachersPage.jsx";
 import ClassesPage from "./pages/ClassesPage/ClassesPage.jsx";
 import AddClassPage from "./pages/AddClassPage/AddClassPage.jsx";
 import ClassDetailsPage from "./pages/ClassDetailsPage/ClassDetailsPage.jsx";
+
+// styles
 import "./styles/partials/_globals.scss";
 
 import { useState } from "react";

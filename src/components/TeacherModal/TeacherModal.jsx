@@ -42,11 +42,12 @@ const TeacherModal = ({
         last_name: teacher.last_name || "",
         email: teacher.email || "",
         phone_number: teacher.phone_number || "",
-        subjects: teacher.subjects || [],
-        grades:
-          typeof teacher.grades === "string"
-            ? teacher.grades.split(",")
-            : teacher.grades || [],
+        subjects: Array.isArray(teacher.subjects)
+          ? teacher.subjects
+          : teacher.subjects?.split(", ") || [],
+        grades: Array.isArray(teacher.grades)
+          ? teacher.grades
+          : teacher.grades?.split(", ") || [],
         additional_notes: teacher.additional_notes || "",
       });
     } else {
@@ -63,9 +64,13 @@ const TeacherModal = ({
     const { value, checked } = e.target;
     setForm((prev) => ({
       ...prev,
-      [category]: checked
-        ? [...prev[category], value]
-        : prev[category].filter((item) => item !== value),
+      [category]: Array.isArray(prev[category])
+        ? checked
+          ? [...prev[category], value]
+          : prev[category].filter((item) => item !== value)
+        : checked
+        ? [value]
+        : [],
     }));
   };
 

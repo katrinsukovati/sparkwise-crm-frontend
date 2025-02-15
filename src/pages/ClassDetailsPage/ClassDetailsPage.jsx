@@ -6,11 +6,23 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./ClassDetailsPage.scss";
 import { IoArrowBack } from "react-icons/io5";
-import EnrolledStudentListHeader from "../../components/EnrolledStudentListHeader/EnrolledStudentListHeader";
-import EnrolledStudentList from "../../components/EnrolledStudentList/EnrolledStudentList";
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
+import ListHeader from "../../components/ListHeader/ListHeader";
+import List from "../../components/List/List";
+import { FaTrashAlt } from "react-icons/fa";
+import DeleteConfirmationModal from "../../components/DeleteConfirmationModal/DeleteConfirmationModal";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
+
+const studentFields = [
+  { key: "name", label: "Student Name" },
+  { key: "grade", label: "Grade" },
+  { key: "email", label: "Student Email" },
+  { key: "parent_name", label: "Parent Name" },
+  { key: "parent_phone", label: "Parent Phone" },
+  { key: "parent_email", label: "Parent Email" },
+  { key: "actions", label: "Actions" },
+];
 
 function ClassDetailsPage() {
   const { semesterId, classId } = useParams();
@@ -21,6 +33,8 @@ function ClassDetailsPage() {
   const [enrolledStudents, setEnrolledStudents] = useState([]);
   const [availableStudents, setAvailableStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [studentToRemove, setStudentToRemove] = useState(null);
 
   useEffect(() => {
     const fetchClassDetails = async () => {
@@ -33,8 +47,13 @@ function ClassDetailsPage() {
         const enrolledRes = await axios.get(
           `${URL}/class-enrollments/${classId}/students`
         );
-        setEnrolledStudents(enrolledRes.data);
-        console.log(enrolledRes);
+        setEnrolledStudents(
+          enrolledRes.data.map((student) => ({
+            ...student,
+            name: `${student.first_name} ${student.last_name}`,
+            parent_name: `${student.parent_first_name} ${student.parent_last_name}`,
+          }))
+        );
 
         // Fetch all students (filter out already enrolled ones)
         const studentsRes = await axios.get(`${URL}/students`);
@@ -76,17 +95,20 @@ function ClassDetailsPage() {
 
       toast.success("Student added successfully!");
 
-      // Update UI
-      setEnrolledStudents((prev) => [
-        ...prev,
-        {
-          id: selectedStudent.value,
-          first_name: selectedStudent.label.split(" ")[0],
-          last_name: selectedStudent.label.split(" ")[1],
-          parent_email: selectedStudent.label.match(/\(([^)]+)\)/)[1], // Extract parent email
-        },
-      ]);
+      // **Fetch the full student data instead of adding manually**
+      const updatedRes = await axios.get(
+        `${URL}/class-enrollments/${classId}/students`
+      );
 
+      setEnrolledStudents(
+        updatedRes.data.map((student) => ({
+          ...student,
+          name: `${student.first_name} ${student.last_name}`,
+          parent_name: `${student.parent_first_name} ${student.parent_last_name}`,
+        }))
+      );
+
+      // Update available students (remove the added student)
       setAvailableStudents((prev) =>
         prev.filter((student) => student.value !== selectedStudent.value)
       );
@@ -95,6 +117,34 @@ function ClassDetailsPage() {
     } catch (error) {
       console.error("Error adding student:", error);
       toast.error("Failed to add student.");
+    }
+  };
+
+  // Function to handle removing a student from the class
+  const handleRemoveStudent = async () => {
+    if (!studentToRemove) return;
+
+    try {
+      const enrollmentId = studentToRemove.enrollment_id;
+      await axios.delete(`${URL}/class-enrollments/${enrollmentId}`);
+
+      setEnrolledStudents((prev) =>
+        prev.filter((student) => student.enrollment_id !== enrollmentId)
+      );
+
+      setAvailableStudents((prev) => [
+        ...prev,
+        {
+          value: studentToRemove.student_id,
+          label: `${studentToRemove.first_name} ${studentToRemove.last_name} (${studentToRemove.parent_email})`,
+        },
+      ]);
+
+      setShowDeleteModal(false);
+      toast.success(`${studentToRemove.name} was removed from the class.`);
+    } catch (error) {
+      console.error("Error removing student:", error);
+      toast.error("Failed to remove student.");
     }
   };
 
@@ -117,7 +167,7 @@ function ClassDetailsPage() {
         <div className="class-info">
           <div className="class-info__title-and-arrow"></div>
           <div className="class-info__details-container">
-            {/* Secstion: General Class Info */}
+            {/* Section: General Class Info */}
             <div className="class-info__details-section">
               <h4 className="class-info__section-title">General Info</h4>
               <p className="class-info__label">
@@ -177,12 +227,40 @@ function ClassDetailsPage() {
           </div>
         </div>
 
-        <EnrolledStudentListHeader />
-        <EnrolledStudentList
-          classId={classId}
-          refreshStudents={() => setEnrolledStudents([...enrolledStudents])}
+        {/* List header and enrolled student list */}
+        <ListHeader headers={studentFields} />
+        <List
+          items={enrolledStudents}
+          fields={studentFields}
+          refreshData={() => setEnrolledStudents([...enrolledStudents])}
+          disableClick={true}
+          onItemClick={() => {}}
+          renderCustomField={(field, student) => {
+            if (field.key === "actions") {
+              return (
+                <FaTrashAlt
+                  className="delete-icon"
+                  size={18}
+                  onClick={() => {
+                    setStudentToRemove(student);
+                    setShowDeleteModal(true);
+                  }}
+                  title="Remove Student"
+                />
+              );
+            }
+            return student[field.key] || "—";
+          }}
         />
       </div>
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        onDelete={handleRemoveStudent}
+        entityName={`${studentToRemove?.name}`}
+        entityType="from this class"
+      />
     </div>
   );
 }

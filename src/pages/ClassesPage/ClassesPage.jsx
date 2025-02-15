@@ -1,15 +1,27 @@
 import "../ClassesPage/ClassesPage.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import ClassesListHeader from "../../components/ClassesListHeader/ClassesListHeader";
-import ClassesList from "../../components/ClassesList/ClassesList";
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 import Search from "../../components/Search/Search";
 import SortBy from "../../components/SortBy/SortBy";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
+import DeleteConfirmationModal from "../../components/DeleteConfirmationModal/DeleteConfirmationModal";
+import { FaTrashAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ListHeader from "../../components/ListHeader/ListHeader";
+import List from "../../components/List/List";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
+
+const classesHeaders = [
+  { key: "class_title", label: "Class Name" },
+  { key: "teacher", label: "Teacher" },
+  { key: "schedule", label: "Schedule" },
+  { key: "students", label: "Students" },
+  { key: "actions", label: "Actions" },
+];
 
 function ClassesPage() {
   const { semesterId } = useParams(); // Get semester ID from URL
@@ -18,6 +30,8 @@ function ClassesPage() {
   const [classes, setClasses] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("newest");
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Fetch Semester Name
   useEffect(() => {
@@ -52,6 +66,30 @@ function ClassesPage() {
   // Handle search input
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  // Handle deleting a class
+  const handleConfirmDelete = async () => {
+    if (!selectedClass) return;
+
+    try {
+      await axios.delete(`${URL}/classes/${selectedClass.id}`);
+      fetchClasses();
+      setShowDeleteModal(false);
+      toast.success(`${selectedClass.class_title} has been removed.`);
+    } catch (error) {
+      console.error("Failed to delete class:", error);
+    }
+  };
+
+  // Format the class schedule to look better
+  const formatSchedule = (schedule) => {
+    if (!schedule || !Array.isArray(schedule) || schedule.length === 0) {
+      return "No schedule provided";
+    }
+    return schedule
+      .map((slot) => `${slot.day}s ${slot.start_time} - ${slot.end_time}`)
+      .join(", ");
   };
 
   return (
@@ -91,9 +129,56 @@ function ClassesPage() {
             </div>
           </div>
         </div>
-        <ClassesListHeader />
-        <ClassesList classes={classes} refreshClasses={fetchClasses} />
+        {/* Header for each column */}
+        <ListHeader headers={classesHeaders} />
+        {/* List of classes */}
+        <List
+          items={classes}
+          fields={classesHeaders}
+          refreshData={fetchClasses}
+          onItemClick={(classData) =>
+            navigate(
+              `/semesters/${classData.semester_id}/classes/${classData.id}`
+            )
+          }
+          renderCustomField={(field, classData) => {
+            if (field.key === "actions") {
+              return (
+                <FaTrashAlt
+                  className="class-item__icon delete-icon"
+                  size={18}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedClass(classData);
+                    setShowDeleteModal(true);
+                  }}
+                />
+              );
+            }
+            if (field.key === "teacher") {
+              return `${classData.teacher_first_name} ${classData.teacher_last_name}`;
+            }
+            if (field.key === "schedule") {
+              return formatSchedule(classData.schedule);
+            }
+            if (field.key === "students") {
+              return `${classData.student_count || 0} Students`;
+            }
+            return classData[field.key] || "—";
+          }}
+        />
       </div>
+
+      {/* Delete modal */}
+      {selectedClass && showDeleteModal && (
+        <DeleteConfirmationModal
+          show={showDeleteModal}
+          onHide={() => setShowDeleteModal(false)}
+          onDelete={handleConfirmDelete}
+          entityName={selectedClass?.class_title}
+          entityType="class"
+        />
+      )}
     </div>
   );
 }
