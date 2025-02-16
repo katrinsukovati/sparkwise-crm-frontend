@@ -8,6 +8,7 @@ import TeachersPage from "./pages/TeachersPage/TeachersPage.jsx";
 import ClassesPage from "./pages/ClassesPage/ClassesPage.jsx";
 import AddClassPage from "./pages/AddClassPage/AddClassPage.jsx";
 import ClassDetailsPage from "./pages/ClassDetailsPage/ClassDetailsPage.jsx";
+import SemesterSchedulePage from "./pages/SemesterSchedulePage/SemesterSchedulePage.jsx";
 
 // styles
 import "./styles/partials/_globals.scss";
@@ -55,10 +56,13 @@ function App() {
               path="/semesters/:semesterId/classes/:classId/edit"
               element={<AddClassPage />}
             />
-
             <Route
               path="/semesters/:semesterId/classes/:classId"
               element={<ClassDetailsPage />}
+            />
+            <Route
+              path="/semesters/:semesterId/schedule"
+              element={<SemesterSchedulePage />}
             />
           </Routes>
         </BrowserRouter>
