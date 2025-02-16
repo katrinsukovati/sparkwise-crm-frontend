@@ -12,6 +12,7 @@ import { MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import TextButton from "../../components/TextButton/TextButton";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -64,12 +65,10 @@ function SemestersPage() {
       <div className="semester-list-container">
         <div className="actions">
           <div className="actions__add">
-            <button
-              className="add-semester-button"
-              onClick={() => setShowAddModal(true)}
-            >
-              + Add Semester
-            </button>
+            <TextButton
+              text={"+ Add Semester"}
+              handleClick={() => setShowAddModal(true)}
+            />
           </div>
           <div className="actions__search-sort-container">
             <div className="actions__search">

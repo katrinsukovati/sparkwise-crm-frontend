@@ -6,6 +6,7 @@ import SortBy from "../../components/SortBy/SortBy";
 import TeacherModal from "../../components/TeacherModal/TeacherModal";
 import ListHeader from "../../components/ListHeader/ListHeader";
 import List from "../../components/List/List";
+import TextButton from "../../components/TextButton/TextButton";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -79,12 +80,10 @@ function TeachersPage() {
       <div className="teacher-list-container">
         <div className="actions">
           <div className="actions__add">
-            <button
-              className="add-teacher-button"
-              onClick={() => setShowAddModal(true)}
-            >
-              + Add Teacher
-            </button>
+            <TextButton
+              text={"+ Add Teacher"}
+              handleClick={() => setShowAddModal(true)}
+            />
           </div>
           <div className="actions__search-sort-container">
             <div className="actions__search">

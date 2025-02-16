@@ -7,6 +7,7 @@ import ClientModal from "../../components/ClientModal/ClientModal";
 import ListHeader from "../../components/ListHeader/ListHeader";
 import List from "../../components/List/List";
 import StatusLabel from "../../components/StatusLabel/StatusLabel";
+import TextButton from "../../components/TextButton/TextButton";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -68,12 +69,10 @@ function ClientsPage() {
       <div className="client-list-container">
         <div className="actions">
           <div className="actions__add">
-            <button
-              className="add-client-button"
-              onClick={() => setShowAddModal(true)}
-            >
-              + Add Client
-            </button>
+            <TextButton
+              text={"+ Add Client"}
+              handleClick={() => setShowAddModal(true)}
+            />
           </div>
           <div className="actions__search-sort-container">
             <div className="actions__search">

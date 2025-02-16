@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ListHeader from "../../components/ListHeader/ListHeader";
 import List from "../../components/List/List";
+import TextButton from "../../components/TextButton/TextButton";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -109,12 +110,16 @@ function ClassesPage() {
       <div className="classes-list-container">
         <div className="actions">
           <div className="actions__add">
-            <button
-              className="add-class-button"
-              onClick={() => navigate(`/semesters/${semesterId}/classes/add`)}
-            >
-              + Add Class
-            </button>
+            <TextButton
+              text={"+ Add Class"}
+              handleClick={() =>
+                navigate(`/semesters/${semesterId}/classes/add`)
+              }
+            />
+            <TextButton
+              text={"📅 View Weekly Schedule"}
+              handleClick={() => navigate(`/semesters/${semesterId}/schedule`)}
+            />
           </div>
           <div className="actions__search-sort-container">
             <div className="actions__search">
