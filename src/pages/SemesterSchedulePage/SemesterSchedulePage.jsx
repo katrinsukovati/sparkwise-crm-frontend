@@ -131,8 +131,8 @@ function SemesterSchedulePage() {
                               height: calculateHeight(start_time, end_time),
                               position: "absolute",
                               top: calculateTopPosition(start_time),
-                              width: classWidth, // ✅ Dynamically adjust width
-                              left: `${(100 / classCount) * index}%`, // ✅ Positions each class correctly
+                              width: classWidth,
+                              left: `${(100 / classCount) * index}%`,
                             }}
                           >
                             <p className="class-title">{cls.class_title}</p>
