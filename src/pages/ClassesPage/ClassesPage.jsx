@@ -96,12 +96,14 @@ function ClassesPage() {
     <div className="content">
       <Breadcrumbs />
       {/* Back Arrow to Navigate to Semester Page */}
-      <div className="back-navigation">
-        <IoArrowBack
-          className="back-arrow"
-          onClick={() => navigate(`/semesters`)}
-        />
-        <h2 className="class-title">Classes ({classes.length})</h2>
+      <div className="title">
+        <div className="title-back">
+          <IoArrowBack
+            className="back-arrow"
+            onClick={() => navigate(`/semesters`)}
+          />
+          <h2 className="class-title">Classes ({classes.length})</h2>
+        </div>
       </div>
 
       <div className="classes-list-container">

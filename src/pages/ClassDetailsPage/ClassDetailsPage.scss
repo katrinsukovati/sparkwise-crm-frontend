@@ -116,6 +116,7 @@
 
   &-back {
     display: flex;
+    align-items: center;
   }
 
   .back-arrow {
@@ -157,11 +158,11 @@
   gap: 1rem;
   align-items: center;
   width: 100%;
-  max-width: 600px; // ✅ Wider max-width
+  max-width: 600px;
 }
 
 .add-student-dropdown {
-  flex-grow: 1; // ✅ Makes it expand fully within max-width
+  flex-grow: 1;
   min-width: 250px;
 }
 

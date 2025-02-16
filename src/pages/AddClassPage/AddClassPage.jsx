@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
 import "./AddClassPage.scss";
+import WarningModal from "../../components/WarningModal/WarningModal";
 
 import ClassForm from "../../components/ClassForm/ClassForm";
 
@@ -19,6 +20,7 @@ function AddClassPage() {
   const [teacherOptions, setTeacherOptions] = useState([]);
   const [studentOptions, setStudentOptions] = useState([]);
   const [initialData, setInitialData] = useState(null);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   useEffect(() => {
     const fetchOptionsAndClass = async () => {
@@ -155,21 +157,14 @@ function AddClassPage() {
   };
 
   const handleCancel = () => {
-    if (mode === "edit") {
-      navigate(`/semesters/${semesterId}/classes/${classId}`);
-    } else {
-      navigate(`/semesters/${semesterId}/classes`);
-    }
+    setShowCancelModal(true);
   };
 
   return (
     <div className="content add-class-page">
       <div className="actions-header">
         <div className="title-with-arrow">
-          <IoArrowBack
-            className="back-arrow"
-            onClick={() => handleCancel()} // ✅ Uses correct navigation logic
-          />
+          <IoArrowBack className="back-arrow" onClick={() => handleCancel()} />
 
           <div className="new-class-title">
             {mode === "edit" ? "Edit Class" : "Add New Class"}
@@ -192,6 +187,19 @@ function AddClassPage() {
           />
         )}
       </div>
+      <WarningModal
+        show={showCancelModal}
+        onHide={() => setShowCancelModal(false)}
+        onConfirm={() => {
+          setShowCancelModal(false);
+          if (mode === "edit") {
+            navigate(`/semesters/${semesterId}/classes/${classId}`);
+          } else {
+            navigate(`/semesters/${semesterId}/classes`);
+          }
+        }}
+        entityName={mode === "edit" ? "your class changes" : "the new class"}
+      />
     </div>
   );
 }

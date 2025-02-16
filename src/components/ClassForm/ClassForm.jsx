@@ -1,9 +1,7 @@
-// src/components/ClassForm/ClassForm.jsx
-
 import { useState, useEffect } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import Select from "react-select";
-
+import WarningModal from "../WarningModal/WarningModal";
 const DEFAULT_CLASS_DURATION_MINUTES = 60;
 
 function ClassForm({
@@ -36,8 +34,6 @@ function ClassForm({
     zoomOption: "none",
     students: [],
   });
-
-  console.log(initialData);
 
   // Which days are selected?
   const [selectedDays, setSelectedDays] = useState([]);
@@ -146,203 +142,218 @@ function ClassForm({
   };
 
   return (
-    <Form>
-      {/* Class Type + Teacher */}
-      <Row>
-        <Col md={6}>
-          <Form.Group className="mb-3">
-            <Form.Label>Class Type</Form.Label>
-            <Select
-              options={classTypeOptions}
-              value={
-                classTypeOptions.find(
-                  (opt) => opt.value === form.class_type_id
-                ) || null
-              }
-              onChange={(selected) =>
-                setForm((prev) => ({ ...prev, class_type_id: selected.value }))
-              }
-            />
-          </Form.Group>
-        </Col>
-        <Col md={6}>
-          <Form.Group className="mb-3">
-            <Form.Label>Teacher</Form.Label>
-            <Select
-              options={teacherOptions}
-              value={
-                teacherOptions.find((opt) => opt.value === form.teacher_id) ||
-                null
-              }
-              onChange={(selected) =>
-                setForm((prev) => ({ ...prev, teacher_id: selected.value }))
-              }
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-
-      {/* Start Date + Occurrences */}
-      <Row>
-        <Col md={6}>
-          <Form.Group className="mb-3">
-            <Form.Label>Start Date</Form.Label>
-            <Form.Control
-              type="date"
-              name="start_date"
-              value={form.start_date}
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Col>
-        <Col md={6}>
-          <Form.Group className="mb-3">
-            <Form.Label>Occurrences</Form.Label>
-            <Form.Control
-              type="number"
-              name="occurrences"
-              value={form.occurrences}
-              onChange={handleChange}
-              min="1"
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-
-      {/* Days of the Week */}
-      <Form.Group className="mb-3">
-        <Form.Label>Days of the Week</Form.Label>
-        <div className="days-container">
-          {daysOfWeek.map((day) => (
-            <Form.Check
-              key={day}
-              label={day}
-              checked={selectedDays.includes(day)}
-              onChange={() => handleDaySelection(day)}
-            />
-          ))}
-        </div>
-      </Form.Group>
-
-      {/* Time pickers for selected days */}
-      {selectedDays.map((day) => (
-        <Row key={day} className="mb-2">
+    <>
+      <Form>
+        {/* Class Type + Teacher */}
+        <Row>
           <Col md={6}>
-            <Form.Group>
-              <Form.Label>{day} Start Time</Form.Label>
-              <Form.Control
-                type="time"
-                name={`start_time_${day}`}
-                value={form[`start_time_${day}`] || ""}
-                onChange={handleChange}
+            <Form.Group className="mb-3">
+              <Form.Label>Class Type</Form.Label>
+              <Select
+                options={classTypeOptions}
+                value={
+                  classTypeOptions.find(
+                    (opt) => opt.value === form.class_type_id
+                  ) || null
+                }
+                onChange={(selected) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    class_type_id: selected.value,
+                  }))
+                }
               />
             </Form.Group>
           </Col>
           <Col md={6}>
-            <Form.Group>
-              <Form.Label>{day} End Time</Form.Label>
-              <Form.Control
-                type="time"
-                name={`end_time_${day}`}
-                value={form[`end_time_${day}`] || ""}
-                onChange={handleChange}
+            <Form.Group className="mb-3">
+              <Form.Label>Teacher</Form.Label>
+              <Select
+                options={teacherOptions}
+                value={
+                  teacherOptions.find((opt) => opt.value === form.teacher_id) ||
+                  null
+                }
+                onChange={(selected) =>
+                  setForm((prev) => ({ ...prev, teacher_id: selected.value }))
+                }
               />
             </Form.Group>
           </Col>
         </Row>
-      ))}
 
-      {/* Students Multi-Select */}
-      <Form.Group className="mb-3">
-        <Form.Label>Students</Form.Label>
-        <Select
-          isMulti
-          options={studentOptions}
-          value={form.students}
-          onChange={(selectedOpts) =>
-            setForm((prev) => ({ ...prev, students: selectedOpts }))
-          }
-        />
-      </Form.Group>
+        {/* Start Date + Occurrences */}
+        <Row>
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Start Date</Form.Label>
+              <Form.Control
+                type="date"
+                name="start_date"
+                value={form.start_date}
+                onChange={handleChange}
+                disabled={mode === "edit"}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Occurrences</Form.Label>
+              <Form.Control
+                type="number"
+                name="occurrences"
+                value={form.occurrences}
+                onChange={handleChange}
+                min="1"
+                disabled={mode === "edit"}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
-      {/* Google Classroom Code */}
-      <Form.Group className="mb-3">
-        <Form.Label>Google Classroom Code</Form.Label>
-        <Form.Control
-          type="text"
-          name="googleClassroomCode"
-          value={form.googleClassroomCode}
-          onChange={handleChange}
-        />
-      </Form.Group>
-
-      {/* Zoom Link Options */}
-      <Form.Group className="mb-3">
-        <Form.Label>Zoom Link Options</Form.Label>
-        <div className="radio-group">
-          <Form.Check
-            type="radio"
-            label="No Zoom link needed"
-            name="zoomOption"
-            value="none"
-            checked={form.zoomOption === "none"}
-            onChange={handleChange}
-            inline
-          />
-          <Form.Check
-            type="radio"
-            label="I have a Zoom link"
-            name="zoomOption"
-            value="provide"
-            checked={form.zoomOption === "provide"}
-            onChange={handleChange}
-            inline
-          />
-          <Form.Check
-            type="radio"
-            label="Generate a Zoom link for me"
-            name="zoomOption"
-            value="generate"
-            checked={form.zoomOption === "generate"}
-            onChange={handleChange}
-            inline
-          />
-        </div>
-      </Form.Group>
-      {form.zoomOption === "provide" && (
+        {/* Days of the Week */}
         <Form.Group className="mb-3">
-          <Form.Control
-            type="url"
-            name="zoomLink"
-            value={form.zoomLink}
-            onChange={handleChange}
-            placeholder="Paste your Zoom link here"
+          <Form.Label>Days of the Week</Form.Label>
+          <div className="days-container">
+            {daysOfWeek.map((day) => (
+              <Form.Check
+                key={day}
+                label={day}
+                checked={selectedDays.includes(day)}
+                onChange={() => handleDaySelection(day)}
+                disabled={mode === "edit"}
+              />
+            ))}
+          </div>
+        </Form.Group>
+
+        {/* Time pickers for selected days */}
+        {selectedDays.map((day) => (
+          <Row key={day} className="mb-2">
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>{day} Start Time</Form.Label>
+                <Form.Control
+                  type="time"
+                  name={`start_time_${day}`}
+                  value={form[`start_time_${day}`] || ""}
+                  onChange={handleChange}
+                  disabled={mode === "edit"}
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>{day} End Time</Form.Label>
+                <Form.Control
+                  type="time"
+                  name={`end_time_${day}`}
+                  value={form[`end_time_${day}`] || ""}
+                  onChange={handleChange}
+                  disabled={mode === "edit"}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+        ))}
+
+        {/* Students Multi-Select */}
+        <Form.Group className="mb-3">
+          <Form.Label>Students</Form.Label>
+          <Select
+            isMulti
+            options={studentOptions}
+            value={form.students}
+            onChange={(selectedOpts) =>
+              setForm((prev) => ({ ...prev, students: selectedOpts }))
+            }
           />
         </Form.Group>
-      )}
 
-      {/* Internal Notes */}
-      <Form.Group className="mb-3">
-        <Form.Label>Internal Notes</Form.Label>
-        <Form.Control
-          as="textarea"
-          name="internalNotes"
-          value={form.internalNotes}
-          onChange={handleChange}
-          rows={3}
-        />
-      </Form.Group>
+        {/* Google Classroom Code */}
+        <Form.Group className="mb-3">
+          <Form.Label>Google Classroom Code</Form.Label>
+          <Form.Control
+            type="text"
+            name="googleClassroomCode"
+            value={form.googleClassroomCode}
+            onChange={handleChange}
+          />
+        </Form.Group>
 
-      {/* Buttons */}
-      <div className="actions-footer">
-        <Button variant="secondary" onClick={onCancel}>
-          {mode === "edit" ? "Cancel Edit" : "Cancel"}
-        </Button>
-        <Button variant="primary" onClick={handleSave}>
-          {mode === "edit" ? "Save Changes" : "Save Class"}
-        </Button>
-      </div>
-    </Form>
+        {/* Zoom Link Options */}
+        <Form.Group className="mb-3">
+          <Form.Label>Zoom Link Options</Form.Label>
+          <div className="radio-group">
+            <Form.Check
+              type="radio"
+              label="No Zoom link needed"
+              name="zoomOption"
+              value="none"
+              checked={form.zoomOption === "none"}
+              onChange={handleChange}
+              disabled={mode === "edit"}
+              inline
+            />
+            <Form.Check
+              type="radio"
+              label="I have a Zoom link"
+              name="zoomOption"
+              value="provide"
+              checked={form.zoomOption === "provide"}
+              onChange={handleChange}
+              disabled={mode === "edit"}
+              inline
+            />
+            <Form.Check
+              type="radio"
+              label="Generate a Zoom link for me"
+              name="zoomOption"
+              value="generate"
+              checked={form.zoomOption === "generate"}
+              onChange={handleChange}
+              disabled={mode === "edit"}
+              inline
+            />
+          </div>
+        </Form.Group>
+        {form.zoomOption === "provide" && (
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="url"
+              name="zoomLink"
+              value={form.zoomLink}
+              onChange={handleChange}
+              placeholder="Paste your Zoom link here"
+              disabled={mode === "edit"}
+            />
+          </Form.Group>
+        )}
+
+        {/* Internal Notes */}
+        <Form.Group className="mb-3">
+          <Form.Label>Internal Notes</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="internalNotes"
+            value={form.internalNotes}
+            onChange={handleChange}
+            rows={3}
+          />
+        </Form.Group>
+
+        {/* Buttons */}
+        <div className="actions-footer">
+          <Button variant="secondary" onClick={onCancel}>
+            {mode === "edit" ? "Cancel Edit" : "Cancel"}
+          </Button>
+
+          <Button variant="primary" onClick={handleSave}>
+            {mode === "edit" ? "Save Changes" : "Save Class"}
+          </Button>
+        </div>
+      </Form>
+    </>
   );
 }
 
